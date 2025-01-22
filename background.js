@@ -77,6 +77,38 @@ async function setupContextMenus() {
     contexts: ["page"]
   });
 
+  // Create Context menu toggle section
+  chrome.contextMenus.create({
+    id: "contextMenuToggle",
+    title: "Context menu",
+    contexts: ["action"]
+  });
+
+  chrome.contextMenus.create({
+    id: "contextMenuOn",
+    title: "On",
+    type: "radio",
+    checked: true,
+    parentId: "contextMenuToggle",
+    contexts: ["action"]
+  });
+
+  chrome.contextMenus.create({
+    id: "contextMenuOff",
+    title: "Off",
+    type: "radio",
+    checked: false,
+    parentId: "contextMenuToggle",
+    contexts: ["action"]
+  });
+
+  // Add separator
+  chrome.contextMenus.create({
+    id: "separator1",
+    type: "separator",
+    contexts: ["action"]
+  });
+
   // Create support menu
   chrome.contextMenus.create({
     id: "support",
@@ -150,6 +182,16 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       storeUrl(tab.url);
       console.log('Sending openPiP message to tab:', tab.id);
       chrome.tabs.sendMessage(tab.id, { action: 'openPiP' });
+      break;
+    case "contextMenuOn":
+      chrome.contextMenus.update("openInCompanionWindow", { visible: true });
+      chrome.contextMenus.update("contextMenuOn", { checked: true });
+      chrome.contextMenus.update("contextMenuOff", { checked: false });
+      break;
+    case "contextMenuOff":
+      chrome.contextMenus.update("openInCompanionWindow", { visible: false });
+      chrome.contextMenus.update("contextMenuOn", { checked: false });
+      chrome.contextMenus.update("contextMenuOff", { checked: true });
       break;
     case "review":
       chrome.tabs.create({ 
