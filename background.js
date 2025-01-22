@@ -1,12 +1,3 @@
-// Create context menu item
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create({
-    id: "openInCompanionWindow",
-    title: "Open in Companion Window",
-    contexts: ["page"]
-  });
-});
-
 // Network rules management
 async function getSessionRules() {
   try {
@@ -76,10 +67,59 @@ async function handleRules(domain, shouldEnable) {
   }
 }
 
-// Clean up rules when extension is unloaded
-chrome.runtime.onSuspend.addListener(async () => {
-  await removeSessionRule();
-});
+
+// Create context menu items
+async function setupContextMenus() {
+  // Create main context menu item
+  chrome.contextMenus.create({
+    id: "openInCompanionWindow",
+    title: "Open in Companion Window",
+    contexts: ["page"]
+  });
+
+  // Create support menu
+  chrome.contextMenus.create({
+    id: "support",
+    title: "❤️ Support",
+    contexts: ["action"]
+  });
+
+  chrome.contextMenus.create({
+    id: "issues",
+    title: "🤔 Issues and Suggestions",
+    contexts: ["action"]
+  });
+
+  chrome.contextMenus.create({
+    id: "github",
+    title: "🌐 GitHub",
+    parentId: "issues",
+    contexts: ["action"]
+  });
+
+  chrome.contextMenus.create({
+    id: "reportIssue",
+    title: "🐛 Report Issue",
+    parentId: "issues",
+    contexts: ["action"]
+  });
+
+  chrome.contextMenus.create({
+    id: "donate",
+    title: "☕ Buy me a coffee",
+    parentId: "support",
+    contexts: ["action"]
+  });
+
+  chrome.contextMenus.create({
+    id: "review",
+    title: "🌟 Leave a review",
+    parentId: "support",
+    contexts: ["action"]
+  });
+}
+
+
 
 // Handle messages from content script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
@@ -88,6 +128,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     removeSessionRule();
   }
 });
+
 
 // URL Storage Management
 function storeUrl(url) {
@@ -102,14 +143,37 @@ function storeUrl(url) {
 
 // Handle context menu clicks
 chrome.contextMenus.onClicked.addListener((info, tab) => {
-  if (info.menuItemId === "openInCompanionWindow") {
-    console.log('Context menu clicked - configuring network rules first');
-    handleRules(tab.url, true);
-    storeUrl(tab.url);
-    console.log('Sending openPiP message to tab:', tab.id);
-    chrome.tabs.sendMessage(tab.id, { action: 'openPiP' });
+  switch(info.menuItemId) {
+    case "openInCompanionWindow":
+      console.log('Context menu clicked - configuring network rules first');
+      handleRules(tab.url, true);
+      storeUrl(tab.url);
+      console.log('Sending openPiP message to tab:', tab.id);
+      chrome.tabs.sendMessage(tab.id, { action: 'openPiP' });
+      break;
+    case "review":
+      chrome.tabs.create({ 
+        url: `https://chromewebstore.google.com/detail/${chrome.runtime.id}/reviews`
+      });
+      break;
+    case "donate":
+      chrome.tabs.create({ 
+        url: "https://ko-fi.com/mohamed3nan"
+      });
+      break;
+    case "github":
+      chrome.tabs.create({ 
+        url: "https://github.com/Mohamed3nan/CompanionWindow"
+      });
+      break;
+    case "reportIssue":
+      chrome.tabs.create({ 
+        url: "https://github.com/Mohamed3nan/CompanionWindow/issues"
+      });
+      break;
   }
 });
+
 
 // Handle extension button click
 chrome.action.onClicked.addListener((tab) => {
@@ -119,3 +183,15 @@ chrome.action.onClicked.addListener((tab) => {
   console.log('Sending openPiP message to tab:', tab.id);
   chrome.tabs.sendMessage(tab.id, { action: 'openPiP' });
 }); 
+
+
+// Clean up rules when extension is unloaded
+chrome.runtime.onSuspend.addListener(async () => {
+  await removeSessionRule();
+});
+
+
+// Initialize context menus
+chrome.runtime.onInstalled.addListener(() => {
+  setupContextMenus();
+});
