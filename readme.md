@@ -40,7 +40,7 @@ The extension uses Document Picture-in-Picture and implements:
 Found a bug or have a suggestion? We'd love to hear from you!
 
 - 🐛 [Report an Issue](https://github.com/Mohamed3nan/CompanionWindow/issues)
-- 🌟 [Leave a Review](https://chromewebstore.google.com/detail/${chrome.runtime.id}/reviews)
+- 🌟 [Leave a Review](https://chromewebstore.google.com/detail//reviews)
 - ❤️ [Support the Project](https://ko-fi.com/mohamed3nan)
 
 ## Contributing
