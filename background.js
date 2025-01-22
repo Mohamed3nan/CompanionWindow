@@ -8,7 +8,17 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 // Network rules management
+async function getSessionRules() {
+  try {
+    return await chrome.declarativeNetRequest.getSessionRules();
+  } catch (error) {
+    console.error('Error getting session rules:', error);
+    return [];
+  }
+}
+
 async function addSessionRule(domain) {
+  console.log('Adding session rule for domain:', domain);
   try {
     const initiatorDomain = new URL(domain).hostname;
     await chrome.declarativeNetRequest.updateSessionRules({
@@ -35,6 +45,7 @@ async function addSessionRule(domain) {
       }]
     });
     console.log('Network rules added successfully for domain:', initiatorDomain);
+    console.log('Current session rules:', await getSessionRules());
   } catch (error) {
     console.error('Error adding network rules:', error);
   }
@@ -73,6 +84,9 @@ chrome.runtime.onSuspend.addListener(async () => {
 // Handle messages from content script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log('Received message in background script:', request);
+  if (request.action === 'cleanupRules') {
+    removeSessionRule();
+  }
 });
 
 // Handle context menu clicks

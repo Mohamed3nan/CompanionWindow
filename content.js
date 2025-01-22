@@ -92,7 +92,7 @@ function createIframe(pipWindow, url) {
   return iframe;
 }
 
-async function openInPictureInPicture() {
+async function togglePictureInPicture() {
   console.log('Attempting to open Picture-in-Picture window');
   try {
     const pipWindow = await window.documentPictureInPicture?.requestWindow({
@@ -140,6 +140,8 @@ async function openInPictureInPicture() {
         pipWindowState.windowId = 0;
         pipWindowState.tabId = 0;
         pipWindowState.icon = '';
+        // Clean up session rules
+        chrome.runtime.sendMessage({ action: 'cleanupRules' });
       }
     });
 
@@ -158,7 +160,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log('Content script received message:', request);
   if (request.action === 'openPiP') {
     console.log('Opening PiP window');
-    openInPictureInPicture();
+    togglePictureInPicture();
     sendResponse({ received: true });
   }
   return true; // Keep the message channel open for the async response
