@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Companion Window Chrome Extension transforms any webpage into a floating Picture-in-Picture (PiP) window, enhancing your browsing experience and productivity. Perfect for multitasking, it allows you to keep any webpage visible while working in other applications or browsing different tabs.
+The Companion Window Chrome Extension transforms any webpage into a floating Document Picture-in-Picture (PiP) window, enhancing your browsing experience and productivity. Perfect for multitasking, it allows you to keep any webpage visible while working in other applications or browsing different tabs.
 
 ## Features
 
@@ -32,7 +32,7 @@ To customize the extension:
 
 ## Technical Details
 
-The extension uses Chrome's Picture-in-Picture API and implements:
+The extension uses Document Picture-in-Picture and implements:
 - Custom header management for broad website compatibility
 
 ## Support
