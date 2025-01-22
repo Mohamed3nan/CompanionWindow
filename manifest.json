@@ -32,7 +32,8 @@
     "activeTab",
     "scripting",
     "declarativeNetRequestWithHostAccess",
-    "contextMenus"
+    "contextMenus",
+    "storage"
   ],
   "host_permissions": [
     "<all_urls>"

@@ -92,6 +92,17 @@ function createIframe(pipWindow, url) {
   return iframe;
 }
 
+async function getStoredUrl() {
+  try {
+    const result = await chrome.storage.local.get(['lastUrl']);
+    return result.lastUrl;
+  } catch (error) {
+    console.error('Error getting stored URL:', error);
+    return null;
+  }
+}
+
+// Toggle Picture-in-Picture window
 async function togglePictureInPicture() {
   console.log('Attempting to open Picture-in-Picture window');
   try {
@@ -126,9 +137,10 @@ async function togglePictureInPicture() {
     // Remove loader
     // loader.remove();
 
-    // Create and add iframe
-    console.log('Adding iframe to PiP window');
-    createIframe(pipWindow, window.location.href);
+    // Create and add iframe with the target URL
+    const targetUrl = await getStoredUrl();
+    console.log('Adding iframe with URL:', targetUrl);
+    createIframe(pipWindow, targetUrl);
 
     // Handle window close
     pipWindow.addEventListener('pagehide', (event) => {

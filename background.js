@@ -89,11 +89,23 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   }
 });
 
+// URL Storage Management
+function storeUrl(url) {
+  try {
+    chrome.storage.local.set({ lastUrl: url });
+    console.log('URL stored successfully:', url);
+  } catch (error) {
+    console.error('Error storing URL:', error);
+  }
+}
+
+
 // Handle context menu clicks
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === "openInCompanionWindow") {
     console.log('Context menu clicked - configuring network rules first');
     handleRules(tab.url, true);
+    storeUrl(tab.url);
     console.log('Sending openPiP message to tab:', tab.id);
     chrome.tabs.sendMessage(tab.id, { action: 'openPiP' });
   }
@@ -103,6 +115,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 chrome.action.onClicked.addListener((tab) => {
   console.log('Extension button clicked for tab:', tab.id);
   handleRules(tab.url, true);
+  storeUrl(tab.url);
   console.log('Sending openPiP message to tab:', tab.id);
   chrome.tabs.sendMessage(tab.id, { action: 'openPiP' });
 }); 
