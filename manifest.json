@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Companion Window",
-  "description": "Open current URL in a Picture-in-Picture window",
+  "description": "Transform any webpage into a floating, always-on-top window for seamless multitasking and enhanced productivity",
   "version": "1.0",
   "background": {
     "service_worker": "background.js",
