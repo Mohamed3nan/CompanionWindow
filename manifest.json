@@ -30,7 +30,6 @@
   },
   "permissions": [
     "activeTab",
-    "scripting",
     "declarativeNetRequestWithHostAccess",
     "contextMenus",
     "storage"
