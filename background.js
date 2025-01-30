@@ -234,6 +234,28 @@ chrome.runtime.onSuspend.addListener(async () => {
 
 
 // Initialize context menus
-chrome.runtime.onInstalled.addListener(() => {
+chrome.runtime.onInstalled.addListener(async (details) => {
   setupContextMenus();
+  
+  if (details.reason === 'install') {
+    // Create a welcome tab
+    chrome.tabs.create({
+      url: chrome.runtime.getURL('welcome.html'),
+      active: true
+    });
+  }
+});
+
+// Handle reload all tabs request
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'reloadAllTabs') {
+    chrome.tabs.query({}, (tabs) => {
+      for (const tab of tabs) {
+        if (!tab.url.startsWith('chrome://')) {
+          chrome.tabs.reload(tab.id);
+        }
+      }
+    });
+  }
+  // ... existing code ...
 });

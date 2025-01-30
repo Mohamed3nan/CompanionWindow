@@ -13,7 +13,12 @@ The Companion Window Chrome Extension transforms any webpage into a floating Doc
 
 
 ## Installation
+Install the extension from the Chrome Web Store.
 
+1. Go to the Chrome Web Store and search for the extension.
+2. Click "Add to Chrome" to install the extension.
+
+Alternatively, you can install it manually:
 1. Clone or download the repository
 2. Open Chrome and navigate to `chrome://extensions/`
 3. Enable "Developer mode" in the top right corner

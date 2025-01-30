@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Companion Window",
   "description": "Transform any webpage into a floating, always-on-top window for seamless multitasking and enhanced productivity",
-  "version": "1.0",
+  "version": "1.1",
   "background": {
     "service_worker": "background.js",
     "type": "module"
@@ -32,9 +32,17 @@
     "activeTab",
     "declarativeNetRequestWithHostAccess",
     "contextMenus",
-    "storage"
+    "storage",
+    "tabs"
   ],
   "host_permissions": [
     "<all_urls>"
-  ]
+  ],
+  "web_accessible_resources": [{
+    "resources": ["welcome.html", "welcome.js"],
+    "matches": ["<all_urls>"]
+  }],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
 } 
