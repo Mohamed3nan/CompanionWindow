@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Companion Window | Always on Top",
   "description": "Transform any webpage into a floating, always-on-top window for seamless multitasking and enhanced productivity",
-  "version": "1.2",
+  "version": "1.3",
   "background": {
     "service_worker": "background.js",
     "type": "module"
@@ -32,8 +32,7 @@
     "activeTab",
     "declarativeNetRequestWithHostAccess",
     "contextMenus",
-    "storage",
-    "tabs"
+    "storage"
   ],
   "host_permissions": [
     "<all_urls>"

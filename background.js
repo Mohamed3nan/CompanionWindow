@@ -251,9 +251,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'reloadAllTabs') {
     chrome.tabs.query({}, (tabs) => {
       for (const tab of tabs) {
-        if (!tab.url.startsWith('chrome://')) {
-          chrome.tabs.reload(tab.id);
-        }
+        chrome.tabs.reload(tab.id);
       }
     });
   }
