@@ -2,10 +2,18 @@
   "manifest_version": 3,
   "name": "Companion Window | Always on Top",
   "description": "Transform any webpage into a floating, always-on-top window for seamless multitasking and enhanced productivity",
-  "version": "1.3",
+  "version": "1.4",
   "background": {
     "service_worker": "background.js",
     "type": "module"
+  },
+  "commands": {
+    "toggle-companion-window": {
+      "suggested_key": {
+        "default": "Alt+C"
+      },
+      "description": "Toggle Companion Window"
+    }
   },
   "content_scripts": [
     {
@@ -38,10 +46,10 @@
     "<all_urls>"
   ],
   "web_accessible_resources": [{
-    "resources": ["welcome.html", "welcome.js"],
+    "resources": ["welcome.html", "welcome.js", "pip.html", "pip.css"],
     "matches": ["<all_urls>"]
   }],
   "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self'"
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
   }
 } 

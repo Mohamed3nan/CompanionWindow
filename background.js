@@ -77,10 +77,18 @@ async function setupContextMenus() {
     contexts: ["page"]
   });
 
-  // Create Context menu toggle section
+  // Create Options menu
+  chrome.contextMenus.create({
+    id: "options",
+    title: "⚙️ Options",
+    contexts: ["action"]
+  });
+
+  // Create Context menu toggle section under Options
   chrome.contextMenus.create({
     id: "contextMenuToggle",
-    title: "Context menu",
+    title: "Context Menu",
+    parentId: "options",
     contexts: ["action"]
   });
 
@@ -99,6 +107,40 @@ async function setupContextMenus() {
     type: "radio",
     checked: false,
     parentId: "contextMenuToggle",
+    contexts: ["action"]
+  });
+
+  // Create Floating Button toggle section under Options
+  chrome.contextMenus.create({
+    id: "floatingButtonToggle",
+    title: "Floating Button",
+    parentId: "options",
+    contexts: ["action"]
+  });
+
+  chrome.contextMenus.create({
+    id: "floatingButtonOn",
+    title: "On",
+    type: "radio",
+    checked: true,
+    parentId: "floatingButtonToggle",
+    contexts: ["action"]
+  });
+
+  chrome.contextMenus.create({
+    id: "floatingButtonOff",
+    title: "Off",
+    type: "radio",
+    checked: false,
+    parentId: "floatingButtonToggle",
+    contexts: ["action"]
+  });
+
+  // Add keyboard shortcuts option
+  chrome.contextMenus.create({
+    id: "keyboardShortcuts",
+    title: "⌨️ Keyboard Shortcuts",
+    parentId: "options",
     contexts: ["action"]
   });
 
@@ -174,7 +216,7 @@ function storeUrl(url) {
 
 
 // Handle context menu clicks
-chrome.contextMenus.onClicked.addListener((info, tab) => {
+chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   switch(info.menuItemId) {
     case "openInCompanionWindow":
       console.log('Context menu clicked - configuring network rules first');
@@ -192,6 +234,33 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
       chrome.contextMenus.update("openInCompanionWindow", { visible: false });
       chrome.contextMenus.update("contextMenuOn", { checked: false });
       chrome.contextMenus.update("contextMenuOff", { checked: true });
+      break;
+    case "floatingButtonOn":
+      await chrome.storage.local.set({ floatingButtonEnabled: true });
+      chrome.contextMenus.update("floatingButtonOn", { checked: true });
+      chrome.contextMenus.update("floatingButtonOff", { checked: false });
+      // Send message to all tabs to update floating button
+      chrome.tabs.query({}, (tabs) => {
+        tabs.forEach(tab => {
+          chrome.tabs.sendMessage(tab.id, { action: 'toggleFloatingButton', state: true });
+        });
+      });
+      break;
+    case "floatingButtonOff":
+      await chrome.storage.local.set({ floatingButtonEnabled: false });
+      chrome.contextMenus.update("floatingButtonOn", { checked: false });
+      chrome.contextMenus.update("floatingButtonOff", { checked: true });
+      // Send message to all tabs to update floating button
+      chrome.tabs.query({}, (tabs) => {
+        tabs.forEach(tab => {
+          chrome.tabs.sendMessage(tab.id, { action: 'toggleFloatingButton', state: false });
+        });
+      });
+      break;
+    case "keyboardShortcuts":
+      chrome.tabs.create({
+        url: `chrome://extensions/shortcuts#:~:text=Toggle%20Companion%20Window`
+      });
       break;
     case "review":
       chrome.tabs.create({ 
@@ -237,6 +306,11 @@ chrome.runtime.onSuspend.addListener(async () => {
 chrome.runtime.onInstalled.addListener(async (details) => {
   setupContextMenus();
   
+  // Set default values
+  chrome.storage.local.set({
+    floatingButtonEnabled: true
+  });
+  
   if (details.reason === 'install') {
     // Create a welcome tab
     chrome.tabs.create({
@@ -255,5 +329,32 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
     });
   }
-  // ... existing code ...
+});
+
+// Handle keyboard shortcuts
+chrome.commands.onCommand.addListener(async (command) => {
+  if (command === "toggle-companion-window") {
+    // Get the active tab
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tab) {
+      try {
+        // Try to send a message to check if PiP window exists
+        const response = await chrome.tabs.sendMessage(tab.id, { action: 'checkPiPWindow' });
+        if (response && response.hasPiPWindow) {
+          // If PiP window exists, close it
+          chrome.tabs.sendMessage(tab.id, { action: 'closePiP' });
+        } else {
+          // If no PiP window, open one
+          handleRules(tab.url, true);
+          storeUrl(tab.url);
+          chrome.tabs.sendMessage(tab.id, { action: 'openPiP' });
+        }
+      } catch (error) {
+        // If message fails (no receiver), assume no PiP window and open one
+        handleRules(tab.url, true);
+        storeUrl(tab.url);
+        chrome.tabs.sendMessage(tab.id, { action: 'openPiP' });
+      }
+    }
+  }
 });

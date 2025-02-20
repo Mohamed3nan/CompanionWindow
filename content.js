@@ -1,61 +1,19 @@
-console.log('Content script loaded for:', window.location.href);
+// console.log('Content script loaded for:', window.location.href);
 
 // Track PiP window state
 const pipWindowState = {
   windowId: 0,
   tabId: 0,
   icon: '',
-  window: null
+  window: null,
+  isMinimized: false,
+  originalWidth: 400,
+  originalHeight: 600
 };
-
-// Styles for the PiP window
-const pipStyles = `
-  body, html {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #f5f5f5;
-  }
-  iframe {
-    width: 100%;
-    height: 100%;
-    border: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-  }
-  .loader {
-    border: 5px solid #f3f3f3;
-    border-radius: 50%;
-    border-top: 5px solid #3498db;
-    width: 50px;
-    height: 50px;
-    animation: spin 1s linear infinite;
-  }
-  .loader-text {
-    position: absolute;
-    top: 60%;
-    text-align: center;
-    color: #3498db;
-    font-family: Arial, sans-serif;
-  }
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-`;
 
 // Create and setup loading spinner
 function createLoader(pipWindow) {
   const loaderContainer = pipWindow.document.createElement('div');
-  loaderContainer.style.position = 'relative';
   
   const loader = pipWindow.document.createElement('div');
   loader.className = 'loader';
@@ -70,11 +28,167 @@ function createLoader(pipWindow) {
   return loaderContainer;
 }
 
-// Setup PiP window styles
-function setupPipWindowStyles(pipWindow) {
-  const style = document.createElement('style');
-  style.textContent = pipStyles;
-  pipWindow.document.head.appendChild(style);
+// Setup window controls
+function setupWindowControls(pipWindow) {
+  const dropdown = pipWindow.document.querySelector('.dropdown');
+  const dotsButton = pipWindow.document.querySelector('.dots-button');
+  const dropdownMenu = pipWindow.document.querySelector('.dropdown-menu');
+  const minimizeButton = pipWindow.document.querySelector('.menu-item.minimize');
+  const reloadButton = pipWindow.document.querySelector('.menu-item.reload');
+  const overlay = pipWindow.document.querySelector('.minimized-overlay');
+  const favicon = pipWindow.document.querySelector('.site-favicon');
+  const siteTitle = pipWindow.document.querySelector('.site-title');
+
+  // Function to update site info
+  const updateSiteInfo = () => {
+    const iframe = pipWindow.document.getElementById('companionWindow');
+    if (iframe) {
+      try {
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        const url = new URL(iframe.src);
+        
+        // Get favicon - try direct page favicon first, then fallback to Google's service
+        const faviconLink = iframeDoc.querySelector('link[rel="icon"]') || 
+                           iframeDoc.querySelector('link[rel="shortcut icon"]');
+        
+        if (faviconLink && faviconLink.href) {
+          favicon.src = faviconLink.href;
+        } else {
+          // Fallback to Google's favicon service
+          favicon.src = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=32`;
+        }
+
+        // Get title
+        siteTitle.textContent = iframeDoc.title || url.hostname || 'Untitled';
+      } catch (e) {
+        console.error('Error accessing iframe content:', e);
+        // Still try to get favicon using Google's service if we have a URL
+        try {
+          const url = new URL(iframe.src);
+          favicon.src = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=32`;
+          siteTitle.textContent = url.hostname || 'Untitled';
+        } catch (urlError) {
+          console.error('Error parsing URL:', urlError);
+        }
+      }
+    }
+  };
+
+  // Check initial window size
+  const checkWindowSize = () => {
+    const isSmall = pipWindow.innerWidth < 200 || pipWindow.innerHeight < 100;
+    if (isSmall) {
+      pipWindowState.isMinimized = true;
+      overlay.classList.add('show');
+      dropdown.classList.add('hide');
+      updateSiteInfo();
+    }
+  };
+
+  // Wait for iframe to load before checking size
+  const iframe = pipWindow.document.getElementById('companionWindow');
+  if (iframe) {
+    iframe.addEventListener('load', () => {
+      checkWindowSize();
+      updateSiteInfo();
+    });
+  }
+
+  // Function to restore window size
+  const restoreWindow = () => {
+    if (pipWindowState.isMinimized) {
+      pipWindow.resizeTo(
+        pipWindowState.originalWidth,
+        pipWindowState.originalHeight
+      );
+      pipWindowState.isMinimized = false;
+      overlay.classList.remove('show');
+      dropdown.classList.remove('hide');
+    }
+  };
+
+  // Handle overlay click to restore
+  overlay.addEventListener('click', () => {
+    restoreWindow();
+  });
+
+  // Toggle dropdown menu
+  dotsButton.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdownMenu.classList.toggle('show');
+  });
+
+  // Close dropdown when clicking outside
+  pipWindow.document.addEventListener('click', (e) => {
+    if (!dropdownMenu.contains(e.target) && !dotsButton.contains(e.target)) {
+      dropdownMenu.classList.remove('show');
+    }
+  });
+
+  // Handle minimize action
+  minimizeButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+    if (!pipWindowState.isMinimized) {
+      pipWindowState.originalWidth = pipWindow.innerWidth;
+      pipWindowState.originalHeight = pipWindow.innerHeight;
+      pipWindow.resizeTo(200, 100);
+      pipWindowState.isMinimized = true;
+      overlay.classList.add('show');
+      dropdown.classList.add('hide');
+      dropdownMenu.classList.remove('show');
+      updateSiteInfo();
+    } else {
+      restoreWindow();
+    }
+  });
+
+  // Handle window resize
+  let resizeTimeout;
+  pipWindow.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      const isSmall = pipWindow.innerWidth < 200 || pipWindow.innerHeight < 100;
+      if (isSmall && !pipWindowState.isMinimized) {
+        pipWindowState.isMinimized = true;
+        overlay.classList.add('show');
+        dropdown.classList.add('hide');
+        dropdownMenu.classList.remove('show');
+        updateSiteInfo();
+      } else if (!isSmall) {
+        // Always remove overlay when window becomes large enough
+        pipWindowState.isMinimized = false;
+        overlay.classList.remove('show');
+        dropdown.classList.remove('hide');
+        dropdownMenu.classList.remove('show');
+      }
+    }, 100);
+  });
+
+  // Handle reload action
+  reloadButton.addEventListener('click', (event) => {
+    event.stopPropagation();
+    const iframe = pipWindow.document.getElementById('companionWindow');
+    if (iframe) {
+      iframe.src = iframe.src;
+    }
+    dropdownMenu.classList.remove('show');
+  });
+
+  // Handle keyboard shortcuts
+  // pipWindow.document.addEventListener('keydown', (e) => {
+  //   if (e.ctrlKey) {
+  //     switch(e.key.toLowerCase()) {
+  //       case 'm':
+  //         e.preventDefault();
+  //         minimizeButton.click();
+  //         break;
+  //       case 'r':
+  //         e.preventDefault();
+  //         reloadButton.click();
+  //         break;
+  //     }
+  //   }
+  // });
 }
 
 // Create and setup iframe
@@ -83,22 +197,24 @@ function createIframe(pipWindow, url) {
   iframe.src = url;
   iframe.id = 'companionWindow';
   iframe.title = 'Companion Window';
-  iframe.setAttribute('frameborder', '0');
-  iframe.setAttribute('allow', 'clipboard-write');
-  iframe.setAttribute('sandbox', 'allow-downloads allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-same-origin allow-scripts allow-top-navigation allow-top-navigation-by-user-activation allow-top-navigation-to-custom-protocols allow-storage-access-by-user-activation');
   
   pipWindow.document.body.appendChild(iframe);
   
   return iframe;
 }
 
-async function getStoredUrl() {
+// Initialize floating button state
+async function initializeFloatingButton(pipWindow) {
   try {
-    const result = await chrome.storage.local.get(['lastUrl']);
-    return result.lastUrl;
+    const result = await chrome.storage.local.get(['floatingButtonEnabled']);
+    const dropdown = pipWindow.document.querySelector('.dropdown');
+    if (dropdown) {
+      if (!result.floatingButtonEnabled) {
+        dropdown.classList.add('hide');
+      }
+    }
   } catch (error) {
-    console.error('Error getting stored URL:', error);
-    return null;
+    console.error('Error getting floating button state:', error);
   }
 }
 
@@ -116,42 +232,76 @@ async function togglePictureInPicture() {
       return;
     }
 
-    // Update PiP window state
-    pipWindowState.window = pipWindow;
-    pipWindowState.windowId = chrome.windows?.WINDOW_ID_CURRENT || 0;
-    pipWindowState.tabId = chrome.tabs?.TAB_ID_NONE || 0;
-    pipWindowState.icon = document.querySelector('link[rel="icon"]')?.href || '';
+    // Inject chrome API access
+    pipWindow.chrome = chrome;
 
-    console.log('PiP window created successfully');
+    // First load CSS
+    const cssResponse = await fetch(chrome.runtime.getURL('pip.css'));
+    const cssText = await cssResponse.text();
     
-    // Set up the PiP window styles
-    setupPipWindowStyles(pipWindow);
+    // Load the HTML file
+    const response = await fetch(chrome.runtime.getURL('pip.html'));
+    const html = await response.text();
+    
+    // Insert initial content
+    pipWindow.document.write(`
+      <style>${cssText}</style>
+      ${html}
+    `);
+    pipWindow.document.close();
 
-    // Add loading spinner
-    // const loader = createLoader(pipWindow);
+    // Setup window controls first
+    setupWindowControls(pipWindow);
 
-    // Wait for rules to take effect (longer delay)
-    // console.log('Waiting for network rules to take effect...');
-    // await new Promise(resolve => setTimeout(resolve, 2000));
+    // Initialize floating button state
+    await initializeFloatingButton(pipWindow);
 
-    // Remove loader
-    // loader.remove();
+    // Add loader after controls are setup
+    const loaderContainer = createLoader(pipWindow);
 
-    // Create and add iframe with the target URL
-    const targetUrl = await getStoredUrl();
-    console.log('Adding iframe with URL:', targetUrl);
-    createIframe(pipWindow, targetUrl);
+    // Wait for iframe to be available
+    const waitForIframe = () => {
+      return new Promise((resolve) => {
+        const iframe = pipWindow.document.getElementById('companionWindow');
+        if (iframe) {
+          resolve(iframe);
+          return;
+        }
+
+        const observer = new MutationObserver(() => {
+          const iframe = pipWindow.document.getElementById('companionWindow');
+          if (iframe) {
+            observer.disconnect();
+            resolve(iframe);
+          }
+        });
+
+        observer.observe(pipWindow.document.body, {
+          childList: true,
+          subtree: true
+        });
+      });
+    };
+
+    const iframe = await waitForIframe();
+
+    // Set iframe URL and remove loader when iframe content loads
+    const url = await getStoredUrl();
+    if (url) {
+      iframe.src = url;
+      iframe.addEventListener('load', () => {
+        if (loaderContainer) loaderContainer.remove();
+      });
+    } else {
+      // If no URL, remove loader immediately
+      if (loaderContainer) loaderContainer.remove();
+    }
 
     // Handle window close
     pipWindow.addEventListener('pagehide', (event) => {
       console.log('PiP window closed');
       if (window.documentPictureInPicture.window) {
         window.documentPictureInPicture.window.close();
-        // Reset PiP window state
-        pipWindowState.window = null;
-        pipWindowState.windowId = 0;
-        pipWindowState.tabId = 0;
-        pipWindowState.icon = '';
         // Clean up session rules
         chrome.runtime.sendMessage({ action: 'cleanupRules' });
       }
@@ -159,20 +309,49 @@ async function togglePictureInPicture() {
 
   } catch (error) {
     console.error('Failed to enter Picture-in-Picture mode:', error);
-    // Reset PiP window state on error
-    pipWindowState.window = null;
-    pipWindowState.windowId = 0;
-    pipWindowState.tabId = 0;
-    pipWindowState.icon = '';
+  }
+}
+
+// Get stored URL
+async function getStoredUrl() {
+  try {
+    const result = await chrome.storage.local.get(['lastUrl']);
+    return result.lastUrl;
+  } catch (error) {
+    console.error('Error getting stored URL:', error);
+    return null;
   }
 }
 
 // Listen for messages from the background script
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   console.log('Content script received message:', request);
-  if (request.action === 'openPiP') {
+  
+  if (request.action === 'checkPiPWindow') {
+    const hasPiPWindow = window.documentPictureInPicture?.window != null;
+    sendResponse({ hasPiPWindow });
+  } else if (request.action === 'closePiP') {
+    if (window.documentPictureInPicture?.window) {
+      window.documentPictureInPicture.window.close();
+      // Clean up session rules
+      chrome.runtime.sendMessage({ action: 'cleanupRules' });
+    }
+    sendResponse({ success: true });
+  } else if (request.action === 'openPiP') {
     console.log('Opening PiP window');
     togglePictureInPicture();
+    sendResponse({ received: true });
+  } else if (request.action === 'toggleFloatingButton') {
+    if (window.documentPictureInPicture?.window) {
+      const dropdown = window.documentPictureInPicture.window.document.querySelector('.dropdown');
+      if (dropdown) {
+        if (request.state) {
+          dropdown.classList.remove('hide');
+        } else {
+          dropdown.classList.add('hide');
+        }
+      }
+    }
     sendResponse({ received: true });
   }
   return true; // Keep the message channel open for the async response

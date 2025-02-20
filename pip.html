@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Companion Window</title>
+</head>
+<body>
+    <div class="dropdown">
+        <input type="checkbox" id="dropdown-toggle" class="dropdown-toggle" hidden>
+        <label for="dropdown-toggle" class="dots-button">• • •</label>
+        <div class="dropdown-menu">
+            <div class="menu-item minimize">
+                <div class="menu-item-left">
+                    <span class="icon">─</span>
+                    <span>Minimize</span>
+                </div>
+                <!-- <span class="shortcut">CTRL + M</span> -->
+            </div>
+            <div class="menu-item reload">
+                <div class="menu-item-left">
+                    <span class="icon">↻</span>
+                    <span>Refresh</span>
+                </div>
+                <!-- <span class="shortcut">CTRL + R</span> -->
+            </div>
+        </div>
+    </div>
+    <div class="minimized-overlay">
+        <div class="site-info">
+            <img class="site-favicon" src="" alt="Site Icon">
+            <div class="site-title">Loading...</div>
+        </div>
+    </div>
+    <iframe id="companionWindow" 
+        title="Companion Window"
+        frameborder="0"
+        allow="clipboard-write"
+        sandbox="allow-downloads allow-forms allow-modals allow-orientation-lock allow-pointer-lock allow-popups allow-popups-to-escape-sandbox allow-presentation allow-same-origin allow-scripts allow-storage-access-by-user-activation">
+    </iframe>
+</body>
+</html> 
