@@ -1,0 +1,29 @@
+{
+  "name": "companion-window",
+  "description": "Transform any webpage into a floating, always-on-top window for seamless multitasking and enhanced productivity",
+  "private": true,
+  "version": "1.5.0",
+  "keywords": [],
+  "author": "Anan",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "wxt",
+    "dev:firefox": "wxt -b firefox",
+    "build": "wxt build",
+    "build:firefox": "wxt build -b firefox",
+    "zip": "wxt zip",
+    "zip:firefox": "wxt zip -b firefox",
+    "compile": "tsc --noEmit",
+    "postinstall": "wxt prepare"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.280",
+    "typescript": "^5.6.3",
+    "wxt": "^0.19.27"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "mellowtel": "^1.5.4"
+  }
+}
