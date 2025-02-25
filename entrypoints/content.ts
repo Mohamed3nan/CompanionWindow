@@ -104,9 +104,14 @@ function setupWindowControls(pipWindow: Window) {
     }
   }
 
+  // Define constants for minimum window dimensions
+  const MIN_WIDTH = 250
+  const MIN_HEIGHT = 75
+
   // Check initial window size
   const checkWindowSize = () => {
-    const isSmall = pipWindow.innerWidth < 200 || pipWindow.innerHeight < 100
+    // Use the same constants for consistency
+    const isSmall = pipWindow.innerWidth < MIN_WIDTH && pipWindow.innerHeight < MIN_HEIGHT
     if (isSmall) {
       pipWindowState.isMinimized = true
       overlay.classList.add('show')
@@ -158,10 +163,15 @@ function setupWindowControls(pipWindow: Window) {
   // Handle minimize action
   minimizeButton.addEventListener('click', (event) => {
     event.stopPropagation()
+    // Uncheck the dropdown toggle
+    const dropdownToggle = pipWindow.document.getElementById('dropdown-toggle') as HTMLInputElement
+    if (dropdownToggle) dropdownToggle.checked = false
+    
     if (!pipWindowState.isMinimized) {
       pipWindowState.originalWidth = pipWindow.innerWidth
       pipWindowState.originalHeight = pipWindow.innerHeight
-      pipWindow.resizeTo(200, 100)
+      // Use MIN_WIDTH and MIN_HEIGHT constants for consistency
+      pipWindow.resizeTo(MIN_WIDTH - 50, MIN_HEIGHT - 5)
       pipWindowState.isMinimized = true
       overlay.classList.add('show')
       dropdown.classList.add('hide')
@@ -177,19 +187,34 @@ function setupWindowControls(pipWindow: Window) {
   pipWindow.addEventListener('resize', () => {
     clearTimeout(resizeTimeout)
     resizeTimeout = setTimeout(() => {
-      const isSmall = pipWindow.innerWidth < 200 || pipWindow.innerHeight < 100
-      if (isSmall && !pipWindowState.isMinimized) {
-        pipWindowState.isMinimized = true
-        overlay.classList.add('show')
-        dropdown.classList.add('hide')
-        dropdownMenu.classList.remove('show')
-        updateSiteInfo()
-      } else if (!isSmall) {
-        // Always remove overlay when window becomes large enough
-        pipWindowState.isMinimized = false
-        overlay.classList.remove('show')
-        dropdown.classList.remove('hide')
-        dropdownMenu.classList.remove('show')
+      // Use the same constants for consistency
+      const isSmall = pipWindow.innerWidth < MIN_WIDTH && pipWindow.innerHeight < MIN_HEIGHT
+      console.log('Window resize:', { 
+        width: pipWindow.innerWidth, 
+        height: pipWindow.innerHeight, 
+        isSmall, 
+        wasMinimized: pipWindowState.isMinimized,
+        overlayShown: overlay.classList.contains('show')
+      })
+      
+      if (isSmall) {
+        // Window is small, add blur if not already minimized
+        if (!pipWindowState.isMinimized) {
+          console.log('Adding blur overlay - window became small')
+          pipWindowState.isMinimized = true
+          overlay.classList.add('show')
+          dropdown.classList.add('hide')
+          dropdownMenu.classList.remove('show')
+          updateSiteInfo()
+        }
+      } else {
+        // Window is large enough, remove blur if it was minimized
+        if (pipWindowState.isMinimized || overlay.classList.contains('show')) {
+          console.log('Removing blur overlay - window became large')
+          pipWindowState.isMinimized = false
+          overlay.classList.remove('show')
+          dropdown.classList.remove('hide')
+        }
       }
     }, 100)
   })
@@ -197,6 +222,10 @@ function setupWindowControls(pipWindow: Window) {
   // Handle reload action
   reloadButton.addEventListener('click', (event) => {
     event.stopPropagation()
+    // Uncheck the dropdown toggle
+    const dropdownToggle = pipWindow.document.getElementById('dropdown-toggle') as HTMLInputElement
+    if (dropdownToggle) dropdownToggle.checked = false
+    
     const iframe = pipWindow.document.getElementById('companionWindow') as HTMLIFrameElement
     if (iframe) {
       iframe.src = iframe.src

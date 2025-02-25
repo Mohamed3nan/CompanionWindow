@@ -26,7 +26,7 @@ body, html {
 }
 
 .dots-button {
-    background: rgba(45, 45, 45, 0.2);
+    background: rgba(45, 45, 45, 0.4);
     border: none;
     font-size: 14px;
     cursor: pointer;
@@ -34,7 +34,7 @@ body, html {
     color: white;
     border-radius: 10px;
     transition: all 0.2s;
-    opacity: 0.2;
+    opacity: 0.4;
     line-height: 1;
     height: 16px;
     display: flex;
@@ -43,8 +43,8 @@ body, html {
 
 .dots-button:hover,
 .dropdown-toggle:checked ~ .dots-button {
-    background: rgba(45, 45, 45, 1);
-    opacity: 1;
+    background: rgba(45, 45, 45, 0.9);
+    opacity: 0.9;
 }
 
 .dropdown-menu {
@@ -52,7 +52,7 @@ body, html {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(45, 45, 45, 0.95);
+    background: rgba(45, 45, 45, 0.9);
     min-width: 150px;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -68,7 +68,7 @@ body, html {
     transform: translateX(-50%);
     border-width: 0 10px 10px 10px;
     border-style: solid;
-    border-color: transparent transparent rgba(45, 45, 45, 0.95) transparent;
+    border-color: transparent transparent rgba(45, 45, 45, 0.9) transparent;
 }
 
 .dropdown-toggle:checked ~ .dropdown-menu {
@@ -181,7 +181,7 @@ iframe {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
     display: none;
     z-index: 999;
     align-items: center;
@@ -191,7 +191,7 @@ iframe {
 }
 
 .minimized-overlay:hover {
-    background: rgba(0, 0, 0, 0.85);
+    background: rgba(0, 0, 0, 0.9);
 }
 
 .minimized-overlay.show {
