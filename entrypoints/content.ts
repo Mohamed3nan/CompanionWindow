@@ -75,6 +75,15 @@ function setupWindowControls(pipWindow: Window) {
     if (iframe) {
       try {
         const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document
+        
+        // Check if iframe.src is a valid URL before constructing URL object
+        if (!iframe.src || iframe.src === 'about:blank') {
+          // Handle empty or invalid URL
+          favicon.src = chrome.runtime.getURL('/icons/48.png') // Use extension icon as fallback
+          siteTitle.textContent = ''
+          return
+        }
+        
         const url = new URL(iframe.src)
         
         // Get favicon - try direct page favicon first, then fallback to Google's service
@@ -89,16 +98,26 @@ function setupWindowControls(pipWindow: Window) {
         }
 
         // Get title
-        siteTitle.textContent = iframeDoc?.title || url.hostname || 'Untitled'
+        siteTitle.textContent = iframeDoc?.title || url.hostname || ''
       } catch (e) {
         console.error('Error accessing iframe content:', e)
         // Still try to get favicon using Google's service if we have a URL
         try {
+          // Additional validation before creating URL
+          if (!iframe.src || iframe.src === 'about:blank') {
+            favicon.src = chrome.runtime.getURL('/icons/48.png') // Use extension icon as fallback
+            siteTitle.textContent = ''
+            return
+          }
+          
           const url = new URL(iframe.src)
           favicon.src = `https://www.google.com/s2/favicons?domain=${url.hostname}&sz=32`
-          siteTitle.textContent = url.hostname || 'Untitled'
+          siteTitle.textContent = url.hostname || ''
         } catch (urlError) {
           console.error('Error parsing URL:', urlError)
+          // Use fallbacks when URL parsing fails
+          favicon.src = chrome.runtime.getURL('/icons/48.png')
+          siteTitle.textContent = ''
         }
       }
     }
