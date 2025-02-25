@@ -1,3 +1,6 @@
+import { storage } from "wxt/storage";
+
+
 declare global {
   interface Window {
     documentPictureInPicture?: {
@@ -6,6 +9,11 @@ declare global {
     }
   }
 }
+
+
+// Define storage items
+const extLastUrl = storage.defineItem<string>("local:extLastUrl");
+const extFloatingButtonEnabled = storage.defineItem<boolean>("local:extFloatingButtonEnabled", { defaultValue: true });
 
 // Track PiP window state
 interface PipWindowState {
@@ -227,15 +235,15 @@ function createIframe(pipWindow: Window, url: string) {
 // Initialize floating button state
 async function initializeFloatingButton(pipWindow: Window) {
   try {
-    const result = await chrome.storage.local.get(['floatingButtonEnabled'])
-    const dropdown = pipWindow.document.querySelector('.dropdown')
+    const isEnabled = await extFloatingButtonEnabled.getValue();
+    const dropdown = pipWindow.document.querySelector('.dropdown');
     if (dropdown) {
-      if (!result.floatingButtonEnabled) {
-        dropdown.classList.add('hide')
+      if (!isEnabled) {
+        dropdown.classList.add('hide');
       }
     }
   } catch (error) {
-    console.error('Error getting floating button state:', error)
+    console.error('Error getting floating button state:', error);
   }
 }
 
@@ -337,11 +345,10 @@ async function togglePictureInPicture() {
 // Get stored URL
 async function getStoredUrl(): Promise<string | null> {
   try {
-    const result = await chrome.storage.local.get(['lastUrl'])
-    return result.lastUrl || null
+    return await extLastUrl.getValue() || null;
   } catch (error) {
-    console.error('Error getting stored URL:', error)
-    return null
+    console.error('Error getting stored URL:', error);
+    return null;
   }
 }
 

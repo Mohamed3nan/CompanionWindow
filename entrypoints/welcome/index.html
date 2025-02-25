@@ -88,7 +88,132 @@
       background: #ccc;
       cursor: not-allowed;
     }
+
+    /* Mellowtel specific styles */
+    .mellowtel-section {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 24px;
+      margin: 20px 0;
+    }
+
+    .mellowtel-toggle {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: #fff;
+      border-radius: 8px;
+      margin: 16px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Checkbox styles */
+    .custom-checkbox {
+      position: relative;
+      cursor: pointer;
+      font-size: 14px;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+    }
+
+    .custom-checkbox input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+
+    .checkmark {
+      position: relative;
+      height: 20px;
+      width: 20px;
+      margin-right: 10px;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+
+    /* Unchecked state - less appealing */
+    input:not(:checked) + .checkmark {
+      background-color: #e0e0e0;
+      border: 1px solid #ccc;
+    }
+
+    /* Checked state - more appealing */
+    input:checked + .checkmark {
+      background-color: #1a73e8;
+      border: 1px solid #1557b0;
+      box-shadow: 0 2px 4px rgba(26, 115, 232, 0.3);
+    }
+
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+
+    input:checked + .checkmark:after {
+      display: block;
+      left: 7px;
+      top: 4px;
+      width: 4px;
+      height: 8px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .checkbox-label {
+      font-weight: 500;
+      color: #333;
+      font-size: 14px;
+    }
+
+    /* Hover effects */
+    .custom-checkbox:hover input:not(:checked) + .checkmark {
+      background-color: #d5d5d5;
+    }
+
+    .custom-checkbox:hover input:checked + .checkmark {
+      background-color: #1557b0;
+    }
+
+    .mellowtel-status {
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      margin-left: 16px;
+      padding: 6px 12px;
+      border-radius: 16px;
+      background: #f5f5f5;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .status-opted-in {
+      background-color: #4CAF50;
+    }
+
+    .status-opted-out {
+      background-color: #f44336;
+    }
+
+    .mellowtel-description {
+      color: #666;
+      margin: 16px 0;
+      line-height: 1.6;
+    }
   </style>
+  <script src="welcome.js" type="module"></script>
 </head>
 <body>
   <h1>Welcome to Companion Window</h1>
@@ -99,31 +224,32 @@
   </div>
 
   <div class="section">
-    <h2>Getting Started</h2>
+    <h2>Getting Started 🚀</h2>
     <p>
       Companion Window lets you transform any webpage into a floating, always-on-top window for seamless multitasking.
       Here's how to use it:
     </p>
-    <ol>
-      <li>Right-click on any webpage and select "Open in Companion Window"</li>
-      <li>Use the keyboard shortcut <span class="shortcut">Alt+C</span> to quickly open the current page</li>
-      <li>Click and drag the window to position it anywhere on your screen</li>
-    </ol>
-  </div>
-
-  <div class="section">
-    <h2>Features</h2>
     <ul>
-      <li>Always-on-top floating window</li>
-      <li>Minimize to a compact view</li>
-      <li>Customizable window size</li>
-      <li>Keyboard shortcuts for faster workflow</li>
-      <li>Context menu integration</li>
+      <li>Pin and click on the extension icon to open the Companion Window</li>
+      <li>You can also right-click on any webpage and click "Open in Companion Window"</li>
+      <li>Use the keyboard shortcut to quickly open the current page in Companion Window</li>
     </ul>
   </div>
 
   <div class="section">
-    <h2>Tips & Tricks</h2>
+    <h2>Features 🌟</h2>
+    <ul>
+      <li>Always-on-top floating window</li>
+      <li>Context menu integration</li>
+      <li>Minimize to a compact view</li>
+      <li>Customizable window size</li>
+      <li>Optional Keyboard shortcuts for faster workflow</li>
+      <li>Optional Menu button in the top-center corner for additional options(Minimize, Reload)</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Tips & Tricks 💡</h2>
     <div class="tip">
       <strong>Tip:</strong> Resize the window by dragging its edges to fit your needs.
     </div>
@@ -131,11 +257,44 @@
       <strong>Tip:</strong> When minimized, click anywhere on the window to restore it.
     </div>
     <div class="tip">
-      <strong>Tip:</strong> Use the three-dot menu in the top-center corner for additional options.
+      <strong>Tip:</strong> Use the three-dot menu in the top-center corner for additional options(Minimize, Reload).
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Support This Extension 🫶🏻</h2>
+    <p>
+      This extension uses the open-source Mellowtel library to help keep it free and available for everyone.
+    </p>
+    <p>
+      Mellowtel is an open-source library that share unused internet with trusted AI labs & startups who use it for their models.
+    </p>
+    <div class="tip">
+      <strong>Support:</strong> The developer of this extension receives a small share of the revenue, helping to keep it free, available, and continuously improving.
+    </div>
+    <div class="tip">
+      <strong>Privacy & Security:</strong> Mellowtel is 100% open source and doesn't collect, share, or sell any personal information - not even anonymized data.
+    </div>
+    <p class="mellowtel-description" style="color: #1a73e8; font-weight: 500; background: #f0f7ff; padding: 12px; border-radius: 6px; border-left: 4px solid #1a73e8;">
+      <strong>🎁 Exclusive Benefits:</strong> Supporters may receive exclusive perks in the future, including early access to new features, premium extensions, or even a share of revenue! Your support today helps ensure continuous improvements and new capabilities!
+    </p>
+    <div class="mellowtel-toggle">
+      <label class="custom-checkbox">
+        <input type="checkbox" id="mellowtel-toggle">
+        <span class="checkmark"></span>
+        <span class="checkbox-label">Support this extension</span>
+      </label>
+      <span class="mellowtel-status">
+        <span class="status-indicator" id="status-indicator"></span>
+        <span id="opt-status">Checking...</span>
+      </span>
     </div>
   </div>
 
   <div class="footer">
+    <p style="margin-bottom: 20px; font-weight: 500; color: #333;">
+      Made with ❤️ by Anan
+    </p>
     <p>
       Having issues or suggestions? <a href="https://github.com/Mohamed3nan/CompanionWindow/issues" target="_blank">Let us know</a>
     </p>
@@ -143,33 +302,5 @@
       If you find this extension helpful, please consider <a href="https://chromewebstore.google.com/detail/${chrome.runtime.id}/reviews" target="_blank">leaving a review</a>
     </p>
   </div>
-
-  <script>
-    const reloadButton = document.getElementById('reloadButton');
-
-    async function reloadAllTabs() {
-      try {
-        reloadButton.textContent = 'Refreshing...';
-        reloadButton.disabled = true;
-
-        const tabs = await chrome.tabs.query({});
-        for (const tab of tabs) {
-          if (tab.id && !tab.url?.startsWith('chrome://')) {
-            await chrome.tabs.reload(tab.id);
-          }
-        }
-
-        setTimeout(() => {
-          reloadButton.textContent = 'Tabs Refreshed!';
-        }, 1000);
-      } catch (error) {
-        console.error('Error reloading tabs:', error);
-        reloadButton.textContent = 'Error - Try Again';
-        reloadButton.disabled = false;
-      }
-    }
-
-    reloadButton.addEventListener('click', reloadAllTabs);
-  </script>
 </body>
 </html> 
