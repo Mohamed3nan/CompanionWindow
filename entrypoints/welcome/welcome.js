@@ -2,6 +2,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const reloadButton = document.getElementById('reloadButton');
   const mellowtelToggle = document.getElementById('mellowtel-toggle');
   const optStatus = document.getElementById('opt-status');
+  const reviewLink = document.getElementById('review-link');
+
+  // Set up review link
+  reviewLink.href = `https://chromewebstore.google.com/detail/${chrome.runtime.id}/reviews`;
 
   async function reloadAllTabs() {
     try {

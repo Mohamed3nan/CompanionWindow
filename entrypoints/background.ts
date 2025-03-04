@@ -272,6 +272,10 @@ export default defineBackground({
       // Initialize Mellowtel first
       await initializeMellowtel();
       
+      // Set up uninstall feedback URL
+      const uninstallURL = await mellowtelInstance.generateFeedbackLink();
+      chrome.runtime.setUninstallURL(uninstallURL);
+      
       if (details.reason === 'install') {
         // Create a welcome tab
         chrome.tabs.create({
