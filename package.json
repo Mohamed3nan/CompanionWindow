@@ -21,10 +21,10 @@
     "@types/chrome": "^0.0.280",
     "typescript": "^5.6.3",
     "vite-plugin-remove-console": "^2.2.0",
-    "wxt": "^0.19.27"
+    "wxt": "^0.19.29"
   },
   "main": "index.js",
   "dependencies": {
-    "mellowtel": "^1.5.4"
+    "mellowtel": "^1.5.6"
   }
 }
