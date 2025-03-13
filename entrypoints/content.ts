@@ -57,14 +57,13 @@ function createLoader(pipWindow: Window) {
 function setupWindowControls(pipWindow: Window) {
   const dropdown = pipWindow.document.querySelector('.dropdown')
   const dotsButton = pipWindow.document.querySelector('.dots-button')
-  const dropdownMenu = pipWindow.document.querySelector('.dropdown-menu')
   const minimizeButton = pipWindow.document.querySelector('.menu-item.minimize')
   const reloadButton = pipWindow.document.querySelector('.menu-item.reload')
   const overlay = pipWindow.document.querySelector('.minimized-overlay')
   const favicon = pipWindow.document.querySelector('.site-favicon') as HTMLImageElement
   const siteTitle = pipWindow.document.querySelector('.site-title')
 
-  if (!dropdown || !dotsButton || !dropdownMenu || !minimizeButton || !reloadButton || !overlay || !favicon || !siteTitle) {
+  if (!dropdown || !dotsButton || !minimizeButton || !reloadButton || !overlay || !favicon || !siteTitle) {
     console.error('Required elements not found')
     return
   }
@@ -79,7 +78,7 @@ function setupWindowControls(pipWindow: Window) {
         // Check if iframe.src is a valid URL before constructing URL object
         if (!iframe.src || iframe.src === 'about:blank') {
           // Handle empty or invalid URL
-          favicon.src = chrome.runtime.getURL('/icons/48.png') // Use extension icon as fallback
+          favicon.src = chrome.runtime.getURL('/icon/48.png') // Use extension icon as fallback
           siteTitle.textContent = ''
           return
         }
@@ -105,7 +104,7 @@ function setupWindowControls(pipWindow: Window) {
         try {
           // Additional validation before creating URL
           if (!iframe.src || iframe.src === 'about:blank') {
-            favicon.src = chrome.runtime.getURL('/icons/48.png') // Use extension icon as fallback
+            favicon.src = chrome.runtime.getURL('/icon/48.png') // Use extension icon as fallback
             siteTitle.textContent = ''
             return
           }
@@ -116,7 +115,7 @@ function setupWindowControls(pipWindow: Window) {
         } catch (urlError) {
           console.error('Error parsing URL:', urlError)
           // Use fallbacks when URL parsing fails
-          favicon.src = chrome.runtime.getURL('/icons/48.png')
+          favicon.src = chrome.runtime.getURL('/icon/48.png')
           siteTitle.textContent = ''
         }
       }
@@ -166,25 +165,11 @@ function setupWindowControls(pipWindow: Window) {
     restoreWindow()
   })
 
-  // Toggle dropdown menu
-  dotsButton.addEventListener('click', (e) => {
-    e.stopPropagation()
-    dropdownMenu.classList.toggle('show')
-  })
-
-  // Close dropdown when clicking outside
-  pipWindow.document.addEventListener('click', (e) => {
-    if (!dropdownMenu.contains(e.target as Node) && !dotsButton.contains(e.target as Node)) {
-      dropdownMenu.classList.remove('show')
-    }
-  })
 
   // Handle minimize action
   minimizeButton.addEventListener('click', (event) => {
     event.stopPropagation()
-    // Uncheck the dropdown toggle
-    const dropdownToggle = pipWindow.document.getElementById('dropdown-toggle') as HTMLInputElement
-    if (dropdownToggle) dropdownToggle.checked = false
+    // No need to uncheck the dropdown toggle as we're using hover now
     
     if (!pipWindowState.isMinimized) {
       pipWindowState.originalWidth = pipWindow.innerWidth
@@ -194,7 +179,6 @@ function setupWindowControls(pipWindow: Window) {
       pipWindowState.isMinimized = true
       overlay.classList.add('show')
       dropdown.classList.add('hide')
-      dropdownMenu.classList.remove('show')
       updateSiteInfo()
     } else {
       restoreWindow()
@@ -223,7 +207,6 @@ function setupWindowControls(pipWindow: Window) {
           pipWindowState.isMinimized = true
           overlay.classList.add('show')
           dropdown.classList.add('hide')
-          dropdownMenu.classList.remove('show')
           updateSiteInfo()
         }
       } else {
@@ -249,23 +232,7 @@ function setupWindowControls(pipWindow: Window) {
     if (iframe) {
       iframe.src = iframe.src
     }
-    dropdownMenu.classList.remove('show')
   })
-  // Handle keyboard shortcuts
-  // pipWindow.document.addEventListener('keydown', (e) => {
-  //   if (e.ctrlKey) {
-  //     switch(e.key.toLowerCase()) {
-  //       case 'm':
-  //         e.preventDefault();
-  //         minimizeButton.click();
-  //         break;
-  //       case 'r':
-  //         e.preventDefault();
-  //         reloadButton.click();
-  //         break;
-  //     }
-  //   }
-  // });
 }
 
 // Create and setup iframe
@@ -440,4 +407,4 @@ export default defineContentScript({
       return true // Keep the message channel open for the async response
     })
   }
-}) 
+})

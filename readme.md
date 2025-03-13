@@ -28,8 +28,10 @@ There are multiple ways to open your current tab in a Companion Window:
 
 ## ⚙️ Extension Options
 Right-click the extension icon in your browser toolbar and select "⚙️ Options", you have several configuration options:
-- **Toggle Context Menu**: Enable or disable the right-click context menu option "Open in Companion Window". When enabled, you can right-click on any webpage and select this option from the context menu to open the current page in a Companion Window.
-- **Toggle Floating Button**: Show or hide the floating menu button (three dots) in the top-center of the companion window. This button provides quick access to additional controls like minimizing or refreshing your companion window.
+- **Context Menu Settings**:
+  - **In Page**: Enable or disable the right-click context menu option "Open in Companion Window" for web pages
+  - **On Link**: Enable or disable the right-click context menu option for opening links directly in Companion Window
+- **Floating Button**: Show or hide the floating menu button (three dots) in the top-center of the companion window. This button provides quick access to additional controls like minimizing or refreshing your companion window.
 - **Keyboard Shortcuts**: Configure or customize the keyboard shortcut (default: Alt+C). You can change this in your browser's extension shortcuts settings to better fit your workflow.
 
 

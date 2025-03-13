@@ -10,6 +10,7 @@ const extUpdateShown = storage.defineItem<boolean>("local:extUpdateShown", { def
 const extMellowtelStatus = storage.defineItem<boolean>("local:extMellowtelStatus", { defaultValue: false });
 const extLastUrl = storage.defineItem<string>("local:extLastUrl");
 const extFloatingButtonEnabled = storage.defineItem<boolean>("local:extFloatingButtonEnabled", { defaultValue: true });
+const extLinkContextMenuEnabled = storage.defineItem<boolean>("local:extLinkContextMenuEnabled", { defaultValue: true });
 
 // Version management
 async function handleVersioning() {
@@ -66,7 +67,7 @@ async function getSessionRules() {
 async function addSessionRule(domain: string) {
   console.log('Adding session rule for domain:', domain)
   try {
-    const initiatorDomain = new URL(domain).hostname
+    // const initiatorDomain = new URL(domain).hostname
     await chrome.declarativeNetRequest.updateSessionRules({
       addRules: [{
         id: 1,
@@ -75,8 +76,12 @@ async function addSessionRule(domain: string) {
           type: chrome.declarativeNetRequest.RuleActionType.MODIFY_HEADERS,
           responseHeaders: [
             { header: "x-frame-options", operation: chrome.declarativeNetRequest.HeaderOperation.REMOVE },
+            { header: "frame-options", operation: chrome.declarativeNetRequest.HeaderOperation.REMOVE},
             { header: "content-security-policy", operation: chrome.declarativeNetRequest.HeaderOperation.REMOVE },
             { header: "content-security-policy-report-only", operation: chrome.declarativeNetRequest.HeaderOperation.REMOVE },
+            { header: "allow-from", operation: chrome.declarativeNetRequest.HeaderOperation.SET, value: "*" },
+            // { header: "access-control-allow-origin", operation: chrome.declarativeNetRequest.HeaderOperation.SET, value: "*" },
+            { header: "frame-ancestors", operation: chrome.declarativeNetRequest.HeaderOperation.SET, value: "*" },
           ],
           requestHeaders: [
             { header: "Sec-Fetch-Dest", operation: chrome.declarativeNetRequest.HeaderOperation.SET, value: "document" },
@@ -86,11 +91,11 @@ async function addSessionRule(domain: string) {
         },
         condition: {
           urlFilter: "*",
-          initiatorDomains: [initiatorDomain]
+          // initiatorDomains: [initiatorDomain]
         }
       }]
     })
-    console.log('Network rules added successfully for domain:', initiatorDomain)
+    // console.log('Network rules added successfully for domain:', initiatorDomain)
     console.log('Current session rules:', await getSessionRules())
   } catch (error) {
     console.error('Error adding network rules:', error)
@@ -140,41 +145,81 @@ function setupContextMenus() {
   })
 
   chrome.contextMenus.create({
+    id: "openLinkInCompanionWindow",
+    title: "Open link in Companion Window",
+    contexts: ["link"]
+  })
+
+  chrome.contextMenus.create({
     id: "options",
     title: "⚙️ Options",
     contexts: ["action"]
   })
 
-  // Create Context menu toggle section under Options
+  // Create Context Menu parent under Options
   chrome.contextMenus.create({
     id: "contextMenuToggle",
-    title: "Context Menu",
+    title: "🖱️ Context Menu",
     parentId: "options",
     contexts: ["action"]
   })
 
+  // Create Page toggle section under Context Menu
   chrome.contextMenus.create({
-    id: "contextMenuOn",
-    title: "On",
-    type: "radio",
-    checked: true,
+    id: "pageToggle",
+    title: "In Page",
     parentId: "contextMenuToggle",
     contexts: ["action"]
   })
 
   chrome.contextMenus.create({
-    id: "contextMenuOff",
+    id: "pageOn",
+    title: "On",
+    type: "radio",
+    checked: true,
+    parentId: "pageToggle",
+    contexts: ["action"]
+  })
+
+  chrome.contextMenus.create({
+    id: "pageOff",
     title: "Off",
     type: "radio",
     checked: false,
+    parentId: "pageToggle",
+    contexts: ["action"]
+  })
+
+  // Create Link toggle section under Context Menu
+  chrome.contextMenus.create({
+    id: "linkToggle",
+    title: "On Link",
     parentId: "contextMenuToggle",
+    contexts: ["action"]
+  })
+
+  chrome.contextMenus.create({
+    id: "linkOn",
+    title: "On",
+    type: "radio",
+    checked: true,
+    parentId: "linkToggle",
+    contexts: ["action"]
+  })
+
+  chrome.contextMenus.create({
+    id: "linkOff",
+    title: "Off",
+    type: "radio",
+    checked: false,
+    parentId: "linkToggle",
     contexts: ["action"]
   })
 
   // Create Floating Button toggle section under Options
   chrome.contextMenus.create({
     id: "floatingButtonToggle",
-    title: "Floating Button",
+    title: "••• Floating Button",
     parentId: "options",
     contexts: ["action"]
   })
@@ -267,14 +312,11 @@ export default defineBackground({
       });
       
       // Set default values
+      await extLinkContextMenuEnabled.setValue(true);
       await extFloatingButtonEnabled.setValue(true);
       
       // Initialize Mellowtel first
       await initializeMellowtel();
-      
-      // Set up uninstall feedback URL
-      const uninstallURL = await mellowtelInstance.generateFeedbackLink();
-      chrome.runtime.setUninstallURL(uninstallURL);
       
       if (details.reason === 'install') {
         // Create a welcome tab
@@ -380,15 +422,39 @@ export default defineBackground({
             storeUrl(tab.url)
           }
           break
-        case "contextMenuOn":
+        case "pageOn":
           chrome.contextMenus.update("openInCompanionWindow", { visible: true })
-          chrome.contextMenus.update("contextMenuOn", { checked: true })
-          chrome.contextMenus.update("contextMenuOff", { checked: false })
+          chrome.contextMenus.update("pageOn", { checked: true })
+          chrome.contextMenus.update("pageOff", { checked: false })
           break
-        case "contextMenuOff":
+        case "pageOff":
           chrome.contextMenus.update("openInCompanionWindow", { visible: false })
-          chrome.contextMenus.update("contextMenuOn", { checked: false })
-          chrome.contextMenus.update("contextMenuOff", { checked: true })
+          chrome.contextMenus.update("pageOn", { checked: false })
+          chrome.contextMenus.update("pageOff", { checked: true })
+          break
+        case "openLinkInCompanionWindow":
+          console.log('Link context menu clicked - configuring network rules for link')
+          if (info.linkUrl) {
+            handleRules(info.linkUrl, true)
+            console.log('Sending openPiP message to tab:', tab.id)
+            chrome.tabs.sendMessage(tab.id, { action: 'openPiP' })
+            // Store link URL after sending the message
+            storeUrl(info.linkUrl)
+          } else {
+            console.error('No link URL found in context menu info')
+          }
+          break
+        case "linkOn":
+          await extLinkContextMenuEnabled.setValue(true);
+          chrome.contextMenus.update("openLinkInCompanionWindow", { visible: true })
+          chrome.contextMenus.update("linkOn", { checked: true })
+          chrome.contextMenus.update("linkOff", { checked: false })
+          break
+        case "linkOff":
+          await extLinkContextMenuEnabled.setValue(false);
+          chrome.contextMenus.update("openLinkInCompanionWindow", { visible: false })
+          chrome.contextMenus.update("linkOn", { checked: false })
+          chrome.contextMenus.update("linkOff", { checked: true })
           break
         case "floatingButtonOn":
           await extFloatingButtonEnabled.setValue(true);
@@ -466,4 +532,4 @@ export default defineBackground({
       }
     })
   }
-}) 
+})

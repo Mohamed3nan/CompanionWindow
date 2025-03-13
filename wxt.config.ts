@@ -7,7 +7,7 @@ export default defineConfig({
   manifest: {
     name: "Companion Window | Always on Top",
     description: "Transform any webpage into a floating, always-on-top window for seamless multitasking and enhanced productivity",
-    version: "2.1",
+    version: "2.2",
     permissions: [
       "activeTab",
       "declarativeNetRequestWithHostAccess",
@@ -18,13 +18,14 @@ export default defineConfig({
     commands: {
       "toggle-companion-window": {
         suggested_key: {
-          default: "Alt+C"
+          default: "Alt+C",
+          mac: "Alt+C"
         },
         description: "Toggle Companion Window"
       }
     },
     content_security_policy: {
-      extension_pages: "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+      extension_pages: "script-src 'self' 'wasm-unsafe-eval'; object-src 'self' 'wasm-unsafe-eval'; worker-src 'self' 'wasm-unsafe-eval';"
     },
     icons: {
       "16": "icon/16.png",
@@ -41,7 +42,7 @@ export default defineConfig({
       }
     },
     web_accessible_resources: [{
-      resources: ["pip.html", "pip.css", "pascoli.html"],
+      resources: ["icon/*", "pip.html", "pip.css", "pascoli.html"],
       matches: ["<all_urls>"]
     }]
   },
