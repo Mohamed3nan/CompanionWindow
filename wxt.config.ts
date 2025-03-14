@@ -7,7 +7,7 @@ export default defineConfig({
   manifest: {
     name: "Companion Window | Always on Top",
     description: "Transform any webpage into a floating, always-on-top window for seamless multitasking and enhanced productivity",
-    version: "2.2",
+    version: "2.3",
     permissions: [
       "activeTab",
       "declarativeNetRequestWithHostAccess",
@@ -42,7 +42,7 @@ export default defineConfig({
       }
     },
     web_accessible_resources: [{
-      resources: ["icon/*", "pip.html", "pip.css", "pascoli.html"],
+      resources: ["icon/*", "pip.html", "pip.css"],
       matches: ["<all_urls>"]
     }]
   },

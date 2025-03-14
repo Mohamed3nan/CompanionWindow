@@ -1,13 +1,8 @@
-import Mellowtel from "mellowtel";
 import { storage } from "wxt/storage";
-
-// Create Mellowtel instance at module scope
-let mellowtelInstance: Mellowtel;
 
 // Define storage items at module scope
 const extCurrentVersion = storage.defineItem<string>("local:extCurrentVersion");
 const extUpdateShown = storage.defineItem<boolean>("local:extUpdateShown", { defaultValue: false });
-const extMellowtelStatus = storage.defineItem<boolean>("local:extMellowtelStatus", { defaultValue: false });
 const extLastUrl = storage.defineItem<string>("local:extLastUrl");
 const extFloatingButtonEnabled = storage.defineItem<boolean>("local:extFloatingButtonEnabled", { defaultValue: true });
 const extLinkContextMenuEnabled = storage.defineItem<boolean>("local:extLinkContextMenuEnabled", { defaultValue: true });
@@ -25,33 +20,6 @@ async function handleVersioning() {
       await extUpdateShown.setValue(true);
     }
   }
-}
-
-// Mellowtel initialization and management
-async function initializeMellowtel() {
-  const MELLOWTEL_API_KEY = import.meta.env.VITE_MELLOWTEL_API_KEY;
-  mellowtelInstance = new Mellowtel(MELLOWTEL_API_KEY);
-  // mellowtelInstance = new Mellowtel(MELLOWTEL_API_KEY, {
-  //   disableLogs: false
-  // });
-
-  await mellowtelInstance.initBackground();
-  const hasOptedIn = await mellowtelInstance.getOptInStatus();
-  
-  // Store initial status
-  await extMellowtelStatus.setValue(hasOptedIn);
-  
-  if (!hasOptedIn) {
-    await mellowtelInstance.optIn();
-    await extMellowtelStatus.setValue(true);
-  }
-  
-  // Start if opted in
-  if (await mellowtelInstance.getOptInStatus()) {
-    await mellowtelInstance.start();
-  }
-  
-  return mellowtelInstance;
 }
 
 // Network rules management
@@ -315,9 +283,6 @@ export default defineBackground({
       await extLinkContextMenuEnabled.setValue(true);
       await extFloatingButtonEnabled.setValue(true);
       
-      // Initialize Mellowtel first
-      await initializeMellowtel();
-      
       if (details.reason === 'install') {
         // Create a welcome tab
         chrome.tabs.create({
@@ -332,58 +297,6 @@ export default defineBackground({
       if (request.action === 'cleanupRules') {
         removeSessionRule();
         sendResponse(true);
-      } else if (request.action === 'getMellowtelStatus') {
-        // Handle getMellowtelStatus synchronously if possible
-        if (!mellowtelInstance) {
-          // Use an immediately invoked async function
-          (async () => {
-            try {
-              const status = await extMellowtelStatus.getValue();
-              sendResponse(status);
-            } catch (error) {
-              sendResponse(false);
-            }
-          })();
-          return true;
-        }
-        
-        // Use an immediately invoked async function
-        (async () => {
-          try {
-            const status = await mellowtelInstance.getOptInStatus();
-            await extMellowtelStatus.setValue(status);
-            sendResponse(status);
-          } catch (error) {
-            sendResponse(false);
-          }
-        })();
-        return true;
-      } else if (request.action === 'toggleMellowtel') {
-        if (!mellowtelInstance) {
-          sendResponse(false);
-          return;
-        }
-
-        // Use an immediately invoked async function
-        (async () => {
-          try {
-            if (request.state) {
-              await mellowtelInstance.optIn();
-              await mellowtelInstance.start();
-              await extMellowtelStatus.setValue(true);
-              sendResponse(true);
-            } else {
-              await mellowtelInstance.optOut();
-              await mellowtelInstance.stop();
-              await extMellowtelStatus.setValue(false);
-              sendResponse(false);
-            }
-          } catch (error) {
-            console.error('Error toggling Mellowtel:', error);
-            sendResponse(request.state ? false : true);
-          }
-        })();
-        return true;
       }
     });
 
