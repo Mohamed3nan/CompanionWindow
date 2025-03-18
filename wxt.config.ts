@@ -8,7 +8,7 @@ export default defineConfig({
   manifest: {
     name: "__MSG_extensionName__",
     description: "__MSG_extensionDescription__",
-    version: "2.5",
+    version: "2.6",
     default_locale: "en",
     permissions: [
       "activeTab",
@@ -44,7 +44,7 @@ export default defineConfig({
       }
     },
     web_accessible_resources: [{
-      resources: ["icon/*", "pip.html", "pip.css"],
+      resources: ["icon/*", "pip.html", "pip.css", "pascoli.html"],
       matches: ["<all_urls>"]
     }]
   },

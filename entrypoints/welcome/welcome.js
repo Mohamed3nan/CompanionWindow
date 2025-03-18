@@ -1,5 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   const reloadButton = document.getElementById('reloadButton');
+  const mellowtelToggle = document.getElementById('mellowtel-toggle');
+  const optStatus = document.getElementById('opt-status');
   const reviewLink = document.getElementById('review-link');
 
   // Set up review link
@@ -27,6 +29,46 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
+
+  async function updateOptStatus() {
+    try {
+      const hasOptedIn = await chrome.runtime.sendMessage({ action: 'getMellowtelStatus' });
+      mellowtelToggle.checked = hasOptedIn;
+      optStatus.textContent = hasOptedIn ? 'Supporter 🫡 (Opted in)' : 'Not Supporting 🫥 (Opted out)';
+      
+      const statusIndicator = document.getElementById('status-indicator');
+      if (hasOptedIn) {
+        statusIndicator.classList.add('status-opted-in');
+        statusIndicator.classList.remove('status-opted-out');
+      } else {
+        statusIndicator.classList.add('status-opted-out');
+        statusIndicator.classList.remove('status-opted-in');
+      }
+    } catch (error) {
+      console.error('Error checking Mellowtel status:', error);
+      optStatus.textContent = 'Error';
+    }
+  }
+
+  async function handleMellowtelToggle(event) {
+    try {
+      await chrome.runtime.sendMessage({ 
+        action: 'toggleMellowtel',
+        state: event.target.checked 
+      });
+      updateOptStatus();
+    } catch (error) {
+      console.error('Error toggling Mellowtel:', error);
+      event.target.checked = !event.target.checked;
+      updateOptStatus();
+    }
+  }
+
+
   // Add event listeners
   reloadButton.addEventListener('click', reloadAllTabs);
+  mellowtelToggle.addEventListener('change', handleMellowtelToggle);
+
+  // Initial status check
+  updateOptStatus();
 }); 

@@ -88,6 +88,131 @@
       background: #ccc;
       cursor: not-allowed;
     }
+
+    /* Mellowtel specific styles */
+    .mellowtel-section {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 24px;
+      margin: 20px 0;
+    }
+
+    .mellowtel-toggle {
+      display: flex;
+      align-items: center;
+      padding: 16px;
+      background: #fff;
+      border-radius: 8px;
+      margin: 16px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Checkbox styles */
+    .custom-checkbox {
+      position: relative;
+      cursor: pointer;
+      font-size: 14px;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+    }
+
+    .custom-checkbox input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+      height: 0;
+      width: 0;
+    }
+
+    .checkmark {
+      position: relative;
+      height: 20px;
+      width: 20px;
+      margin-right: 10px;
+      border-radius: 4px;
+      transition: all 0.3s;
+    }
+
+    /* Unchecked state - less appealing */
+    input:not(:checked) + .checkmark {
+      background-color: #e0e0e0;
+      border: 1px solid #ccc;
+    }
+
+    /* Checked state - more appealing */
+    input:checked + .checkmark {
+      background-color: #1a73e8;
+      border: 1px solid #1557b0;
+      box-shadow: 0 2px 4px rgba(26, 115, 232, 0.3);
+    }
+
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+
+    input:checked + .checkmark:after {
+      display: block;
+      left: 7px;
+      top: 4px;
+      width: 4px;
+      height: 8px;
+      border: solid white;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .checkbox-label {
+      font-weight: 500;
+      color: #333;
+      font-size: 14px;
+    }
+
+    /* Hover effects */
+    .custom-checkbox:hover input:not(:checked) + .checkmark {
+      background-color: #d5d5d5;
+    }
+
+    .custom-checkbox:hover input:checked + .checkmark {
+      background-color: #1557b0;
+    }
+
+    .mellowtel-status {
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      margin-left: 16px;
+      padding: 6px 12px;
+      border-radius: 16px;
+      background: #f5f5f5;
+    }
+
+    .status-indicator {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 8px;
+    }
+
+    .status-opted-in {
+      background-color: #4CAF50;
+    }
+
+    .status-opted-out {
+      background-color: #f44336;
+    }
+
+    .mellowtel-description {
+      color: #666;
+      margin: 16px 0;
+      line-height: 1.6;
+    }
+
   </style>
   <script src="welcome.js" type="module"></script>
 </head>
@@ -136,6 +261,40 @@
       <strong>Tip:</strong> Use the three-dot menu in the top-center corner for additional options(Minimize, Reload).
     </div>
   </div>
+
+  <div class="section">
+    <h2>Support This Extension 🫶🏻</h2>
+    <p>
+      This extension uses the open-source Mellowtel library to help keep it free and available for everyone.
+    </p>
+    <p>
+      Mellowtel is an open-source library that share unused bandwidth with trusted AI labs & startups who use it for their models. The library is used by hundreds of thousands of users and developers.
+    </p>
+    <div class="tip">
+      <strong>Support:</strong> The developer of this extension receives a small share of the revenue, helping to keep it free, available, and continuously improving.
+    </div>
+    <div class="tip">
+      <strong>Privacy & Security:</strong> Mellowtel is 100% open source and doesn't collect, share, or sell any personal information - not even anonymized data.
+    </div>
+    <div class="tip">
+      <strong>User Control:</strong> You can opt out at any time through this page or the extension options. Your choice is always respected.
+    </div>
+    <p class="mellowtel-description" style="color: #1a73e8; font-weight: 500; background: #f0f7ff; padding: 12px; border-radius: 6px; border-left: 4px solid #1a73e8;">
+      <strong>🎁 Exclusive Benefits:</strong> Supporters may receive exclusive perks in the future, including early access to new features, premium extensions, or even a share of revenue!
+    </p>
+    <div class="mellowtel-toggle">
+      <label class="custom-checkbox">
+        <input type="checkbox" id="mellowtel-toggle">
+        <span class="checkmark"></span>
+        <span class="checkbox-label">Support this extension</span>
+      </label>
+      <span class="mellowtel-status">
+        <span class="status-indicator" id="status-indicator"></span>
+        <span id="opt-status">Checking...</span>
+      </span>
+    </div>
+  </div>
+
 
   <div class="footer">
     <p style="margin-bottom: 20px; font-weight: 500; color: #333;">

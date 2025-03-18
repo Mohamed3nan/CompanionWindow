@@ -1,5 +1,9 @@
 import { storage } from "wxt/storage";
 import { i18n } from '#i18n';
+import Mellowtel from "mellowtel";
+
+// Create Mellowtel instance at module scope
+let mellowtelInstance: Mellowtel;
 
 // Define storage items at module scope
 const extCurrentVersion = storage.defineItem<string>("local:extCurrentVersion");
@@ -7,6 +11,36 @@ const extUpdateShown = storage.defineItem<boolean>("local:extUpdateShown", { def
 const extLastUrl = storage.defineItem<string>("local:extLastUrl");
 const extFloatingButtonEnabled = storage.defineItem<boolean>("local:extFloatingButtonEnabled", { defaultValue: true });
 const extLinkContextMenuEnabled = storage.defineItem<boolean>("local:extLinkContextMenuEnabled", { defaultValue: true });
+const extMellowtelStatus = storage.defineItem<boolean>("local:extMellowtelStatus", { defaultValue: false });
+
+
+// Mellowtel initialization and management
+async function initializeMellowtel() {
+  const MELLOWTEL_API_KEY = import.meta.env.VITE_MELLOWTEL_API_KEY;
+  mellowtelInstance = new Mellowtel(MELLOWTEL_API_KEY);
+  // mellowtelInstance = new Mellowtel(MELLOWTEL_API_KEY, {
+  //   disableLogs: false
+  // });
+
+  await mellowtelInstance.initBackground();
+  const hasOptedIn = await mellowtelInstance.getOptInStatus();
+  
+  // Store initial status
+  await extMellowtelStatus.setValue(hasOptedIn);
+  
+  if (!hasOptedIn) {
+    await mellowtelInstance.optIn();
+    await extMellowtelStatus.setValue(true);
+  }
+  
+  // Start if opted in
+  if (await mellowtelInstance.getOptInStatus()) {
+    await mellowtelInstance.start();
+  }
+  
+  return mellowtelInstance;
+}
+
 
 // Version management
 async function handleVersioning() {
@@ -284,6 +318,9 @@ export default defineBackground({
       await extLinkContextMenuEnabled.setValue(true);
       await extFloatingButtonEnabled.setValue(true);
       
+      // Initialize Mellowtel first
+      await initializeMellowtel();
+      
       if (details.reason === 'install') {
         // Create a welcome tab
         chrome.tabs.create({
@@ -298,6 +335,60 @@ export default defineBackground({
       if (request.action === 'cleanupRules') {
         removeSessionRule();
         sendResponse(true);
+      } else if (request.action === 'getMellowtelStatus') {
+        // Handle getMellowtelStatus synchronously if possible
+        if (!mellowtelInstance) {
+          // Initialize Mellowtel if not already initialized
+          (async () => {
+            try {
+              await initializeMellowtel();
+              const status = await extMellowtelStatus.getValue();
+              sendResponse(status);
+            } catch (error) {
+              console.error('Error initializing Mellowtel:', error);
+              sendResponse(false);
+            }
+          })();
+          return true;
+        }
+        
+        // Use an immediately invoked async function
+        (async () => {
+          try {
+            const status = await mellowtelInstance.getOptInStatus();
+            await extMellowtelStatus.setValue(status);
+            sendResponse(status);
+          } catch (error) {
+            sendResponse(false);
+          }
+        })();
+        return true;
+      } else if (request.action === 'toggleMellowtel') {
+        if (!mellowtelInstance) {
+          sendResponse(false);
+          return;
+        }
+
+        // Use an immediately invoked async function
+        (async () => {
+          try {
+            if (request.state) {
+              await mellowtelInstance.optIn();
+              await mellowtelInstance.start();
+              await extMellowtelStatus.setValue(true);
+              sendResponse(true);
+            } else {
+              await mellowtelInstance.optOut();
+              await mellowtelInstance.stop();
+              await extMellowtelStatus.setValue(false);
+              sendResponse(false);
+            }
+          } catch (error) {
+            console.error('Error toggling Mellowtel:', error);
+            sendResponse(request.state ? false : true);
+          }
+        })();
+        return true;
       }
     });
 
