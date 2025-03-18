@@ -7,7 +7,7 @@ export default defineConfig({
   manifest: {
     name: "Companion Window | Always on Top",
     description: "Transform any webpage into a floating, always-on-top window for seamless multitasking and enhanced productivity",
-    version: "2.3",
+    version: "2.4",
     permissions: [
       "activeTab",
       "declarativeNetRequestWithHostAccess",

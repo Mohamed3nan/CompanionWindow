@@ -52,7 +52,7 @@ async function addSessionRule(domain: string) {
             { header: "frame-ancestors", operation: chrome.declarativeNetRequest.HeaderOperation.SET, value: "*" },
           ],
           requestHeaders: [
-            { header: "Sec-Fetch-Dest", operation: chrome.declarativeNetRequest.HeaderOperation.SET, value: "document" },
+            // { header: "Sec-Fetch-Dest", operation: chrome.declarativeNetRequest.HeaderOperation.SET, value: "document" },
             { header: "Sec-Fetch-Site", operation: chrome.declarativeNetRequest.HeaderOperation.SET, value: "same-origin" },
             { header: "If-None-Match", operation: chrome.declarativeNetRequest.HeaderOperation.REMOVE }
           ]
