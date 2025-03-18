@@ -1,0 +1,59 @@
+{
+  "extensionName": {
+    "message": "伴侣窗口 | 始终置顶"
+  },
+  "extensionDescription": {
+    "message": "将任何网页转换为浮动的、始终置顶的窗口，实现无缝多任务处理和提高生产力"
+  },
+  "toggleCompanionWindow": {
+    "message": "切换伴侣窗口"
+  },
+  "openInCompanionWindow": {
+    "message": "在伴侣窗口中打开"
+  },
+  "openLinkInCompanionWindow": {
+    "message": "在伴侣窗口中打开链接"
+  },
+  "options": {
+    "message": "⚙️ 选项"
+  },
+  "contextMenu": {
+    "message": "🖱️ 右键菜单"
+  },
+  "inPage": {
+    "message": "页面中"
+  },
+  "on": {
+    "message": "开启"
+  },
+  "off": {
+    "message": "关闭"
+  },
+  "onLink": {
+    "message": "链接上"
+  },
+  "floatingButton": {
+    "message": "••• 浮动按钮"
+  },
+  "keyboardShortcuts": {
+    "message": "⌨️ 键盘快捷键"
+  },
+  "support": {
+    "message": "❤️ 支持"
+  },
+  "issuesAndSuggestions": {
+    "message": "🤔 问题和建议"
+  },
+  "github": {
+    "message": "🌐 GitHub"
+  },
+  "reportIssue": {
+    "message": "🐛 报告问题"
+  },
+  "buyMeACoffee": {
+    "message": "☕ 请我喝咖啡"
+  },
+  "leaveAReview": {
+    "message": "🌟 留下评论"
+  }
+} 

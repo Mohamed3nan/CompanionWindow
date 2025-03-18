@@ -1,0 +1,59 @@
+{
+  "extensionName": {
+    "message": "النافذة المرافقة | دائماً في المقدمة"
+  },
+  "extensionDescription": {
+    "message": "حوّل أي صفحة ويب إلى نافذة عائمة دائماً في المقدمة لتعدد المهام السلس وتحسين الإنتاجية"
+  },
+  "toggleCompanionWindow": {
+    "message": "تبديل النافذة المرافقة"
+  },
+  "openInCompanionWindow": {
+    "message": "فتح في النافذة المرافقة"
+  },
+  "openLinkInCompanionWindow": {
+    "message": "فتح الرابط في النافذة المرافقة"
+  },
+  "options": {
+    "message": "⚙️ الإعدادات"
+  },
+  "contextMenu": {
+    "message": "🖱️ القائمة السياقية"
+  },
+  "inPage": {
+    "message": "في الصفحة"
+  },
+  "on": {
+    "message": "تشغيل"
+  },
+  "off": {
+    "message": "إيقاف"
+  },
+  "onLink": {
+    "message": "على الرابط"
+  },
+  "floatingButton": {
+    "message": "••• الزر العائم"
+  },
+  "keyboardShortcuts": {
+    "message": "⌨️ اختصارات لوحة المفاتيح"
+  },
+  "support": {
+    "message": "❤️ الدعم"
+  },
+  "issuesAndSuggestions": {
+    "message": "🤔 المشاكل والاقتراحات"
+  },
+  "github": {
+    "message": "🌐 GitHub"
+  },
+  "reportIssue": {
+    "message": "🐛 الإبلاغ عن مشكلة"
+  },
+  "buyMeACoffee": {
+    "message": "☕ اشترِ لي قهوة"
+  },
+  "leaveAReview": {
+    "message": "🌟 ترك تقييم"
+  }
+} 

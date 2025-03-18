@@ -1,0 +1,59 @@
+{
+  "extensionName": {
+    "message": "컴패니언 윈도우 | 항상 위에"
+  },
+  "extensionDescription": {
+    "message": "모든 웹페이지를 원활한 멀티태스킹과 생산성 향상을 위한 플로팅 항상 위에 표시 창으로 변환"
+  },
+  "toggleCompanionWindow": {
+    "message": "컴패니언 윈도우 전환"
+  },
+  "openInCompanionWindow": {
+    "message": "컴패니언 윈도우에서 열기"
+  },
+  "openLinkInCompanionWindow": {
+    "message": "링크를 컴패니언 윈도우에서 열기"
+  },
+  "options": {
+    "message": "⚙️ 옵션"
+  },
+  "contextMenu": {
+    "message": "🖱️ 컨텍스트 메뉴"
+  },
+  "inPage": {
+    "message": "페이지 내"
+  },
+  "on": {
+    "message": "켜기"
+  },
+  "off": {
+    "message": "끄기"
+  },
+  "onLink": {
+    "message": "링크에서"
+  },
+  "floatingButton": {
+    "message": "••• 플로팅 버튼"
+  },
+  "keyboardShortcuts": {
+    "message": "⌨️ 키보드 단축키"
+  },
+  "support": {
+    "message": "❤️ 지원"
+  },
+  "issuesAndSuggestions": {
+    "message": "🤔 문제점 및 제안"
+  },
+  "github": {
+    "message": "🌐 GitHub"
+  },
+  "reportIssue": {
+    "message": "🐛 문제 신고하기"
+  },
+  "buyMeACoffee": {
+    "message": "☕ 커피 한 잔 사주기"
+  },
+  "leaveAReview": {
+    "message": "🌟 리뷰 남기기"
+  }
+} 

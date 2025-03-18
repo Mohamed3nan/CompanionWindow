@@ -1,4 +1,5 @@
 import { storage } from "wxt/storage";
+import { i18n } from '#i18n';
 
 // Define storage items at module scope
 const extCurrentVersion = storage.defineItem<string>("local:extCurrentVersion");
@@ -108,26 +109,26 @@ async function storeUrl(url: string) {
 function setupContextMenus() {
   chrome.contextMenus.create({
     id: "openInCompanionWindow",
-    title: "Open in Companion Window",
+    title: i18n.t("openInCompanionWindow"),
     contexts: ["page"]
   })
 
   chrome.contextMenus.create({
     id: "openLinkInCompanionWindow",
-    title: "Open link in Companion Window",
+    title: i18n.t("openLinkInCompanionWindow"),
     contexts: ["link"]
   })
 
   chrome.contextMenus.create({
     id: "options",
-    title: "⚙️ Options",
+    title: i18n.t("options"),
     contexts: ["action"]
   })
 
   // Create Context Menu parent under Options
   chrome.contextMenus.create({
     id: "contextMenuToggle",
-    title: "🖱️ Context Menu",
+    title: i18n.t("contextMenu"),
     parentId: "options",
     contexts: ["action"]
   })
@@ -135,14 +136,14 @@ function setupContextMenus() {
   // Create Page toggle section under Context Menu
   chrome.contextMenus.create({
     id: "pageToggle",
-    title: "In Page",
+    title: i18n.t("inPage"),
     parentId: "contextMenuToggle",
     contexts: ["action"]
   })
 
   chrome.contextMenus.create({
     id: "pageOn",
-    title: "On",
+    title: i18n.t("on"),
     type: "radio",
     checked: true,
     parentId: "pageToggle",
@@ -151,7 +152,7 @@ function setupContextMenus() {
 
   chrome.contextMenus.create({
     id: "pageOff",
-    title: "Off",
+    title: i18n.t("off"),
     type: "radio",
     checked: false,
     parentId: "pageToggle",
@@ -161,14 +162,14 @@ function setupContextMenus() {
   // Create Link toggle section under Context Menu
   chrome.contextMenus.create({
     id: "linkToggle",
-    title: "On Link",
+    title: i18n.t("onLink"),
     parentId: "contextMenuToggle",
     contexts: ["action"]
   })
 
   chrome.contextMenus.create({
     id: "linkOn",
-    title: "On",
+    title: i18n.t("on"),
     type: "radio",
     checked: true,
     parentId: "linkToggle",
@@ -177,7 +178,7 @@ function setupContextMenus() {
 
   chrome.contextMenus.create({
     id: "linkOff",
-    title: "Off",
+    title: i18n.t("off"),
     type: "radio",
     checked: false,
     parentId: "linkToggle",
@@ -187,14 +188,14 @@ function setupContextMenus() {
   // Create Floating Button toggle section under Options
   chrome.contextMenus.create({
     id: "floatingButtonToggle",
-    title: "••• Floating Button",
+    title: i18n.t("floatingButton"),
     parentId: "options",
     contexts: ["action"]
   })
 
   chrome.contextMenus.create({
     id: "floatingButtonOn",
-    title: "On",
+    title: i18n.t("on"),
     type: "radio",
     checked: true,
     parentId: "floatingButtonToggle",
@@ -203,7 +204,7 @@ function setupContextMenus() {
 
   chrome.contextMenus.create({
     id: "floatingButtonOff",
-    title: "Off",
+    title: i18n.t("off"),
     type: "radio",
     checked: false,
     parentId: "floatingButtonToggle",
@@ -213,7 +214,7 @@ function setupContextMenus() {
   // Add keyboard shortcuts option
   chrome.contextMenus.create({
     id: "keyboardShortcuts",
-    title: "⌨️ Keyboard Shortcuts",
+    title: i18n.t("keyboardShortcuts"),
     parentId: "options",
     contexts: ["action"]
   })
@@ -228,40 +229,40 @@ function setupContextMenus() {
   // Create support menu
   chrome.contextMenus.create({
     id: "support",
-    title: "❤️ Support",
+    title: i18n.t("support"),
     contexts: ["action"]
   })
 
   chrome.contextMenus.create({
     id: "issues",
-    title: "🤔 Issues and Suggestions",
+    title: i18n.t("issuesAndSuggestions"),
     contexts: ["action"]
   })
 
   chrome.contextMenus.create({
     id: "github",
-    title: "🌐 GitHub",
+    title: i18n.t("github"),
     parentId: "issues",
     contexts: ["action"]
   })
 
   chrome.contextMenus.create({
     id: "reportIssue",
-    title: "🐛 Report Issue",
+    title: i18n.t("reportIssue"),
     parentId: "issues",
     contexts: ["action"]
   })
 
   chrome.contextMenus.create({
     id: "donate",
-    title: "☕ Buy me a coffee",
+    title: i18n.t("buyMeACoffee"),
     parentId: "support",
     contexts: ["action"]
   })
 
   chrome.contextMenus.create({
     id: "review",
-    title: "🌟 Leave a review",
+    title: i18n.t("leaveAReview"),
     parentId: "support",
     contexts: ["action"]
   })

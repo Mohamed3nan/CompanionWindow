@@ -1,0 +1,59 @@
+{
+  "extensionName": {
+    "message": "Окно-компаньон | Поверх всех окон"
+  },
+  "extensionDescription": {
+    "message": "Превратите любую веб-страницу в плавающее окно поверх всех окон для удобной многозадачности и повышенной продуктивности"
+  },
+  "toggleCompanionWindow": {
+    "message": "Переключить окно-компаньон"
+  },
+  "openInCompanionWindow": {
+    "message": "Открыть в окне-компаньоне"
+  },
+  "openLinkInCompanionWindow": {
+    "message": "Открыть ссылку в окне-компаньоне"
+  },
+  "options": {
+    "message": "⚙️ Настройки"
+  },
+  "contextMenu": {
+    "message": "🖱️ Контекстное меню"
+  },
+  "inPage": {
+    "message": "На странице"
+  },
+  "on": {
+    "message": "Включено"
+  },
+  "off": {
+    "message": "Выключено"
+  },
+  "onLink": {
+    "message": "На ссылке"
+  },
+  "floatingButton": {
+    "message": "••• Плавающая кнопка"
+  },
+  "keyboardShortcuts": {
+    "message": "⌨️ Горячие клавиши"
+  },
+  "support": {
+    "message": "❤️ Поддержка"
+  },
+  "issuesAndSuggestions": {
+    "message": "🤔 Проблемы и предложения"
+  },
+  "github": {
+    "message": "🌐 GitHub"
+  },
+  "reportIssue": {
+    "message": "🐛 Сообщить о проблеме"
+  },
+  "buyMeACoffee": {
+    "message": "☕ Угостить кофе"
+  },
+  "leaveAReview": {
+    "message": "🌟 Оставить отзыв"
+  }
+} 

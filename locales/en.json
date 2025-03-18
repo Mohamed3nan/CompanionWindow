@@ -1,0 +1,59 @@
+{
+  "extensionName": {
+    "message": "Companion Window | Always on Top"
+  },
+  "extensionDescription": {
+    "message": "Transform any webpage into a floating, always-on-top window for seamless multitasking and enhanced productivity"
+  },
+  "toggleCompanionWindow": {
+    "message": "Toggle Companion Window"
+  },
+  "openInCompanionWindow": {
+    "message": "Open in Companion Window"
+  },
+  "openLinkInCompanionWindow": {
+    "message": "Open link in Companion Window"
+  },
+  "options": {
+    "message": "⚙️ Options"
+  },
+  "contextMenu": {
+    "message": "🖱️ Context Menu"
+  },
+  "inPage": {
+    "message": "In Page"
+  },
+  "on": {
+    "message": "On"
+  },
+  "off": {
+    "message": "Off"
+  },
+  "onLink": {
+    "message": "On Link"
+  },
+  "floatingButton": {
+    "message": "••• Floating Button"
+  },
+  "keyboardShortcuts": {
+    "message": "⌨️ Keyboard Shortcuts"
+  },
+  "support": {
+    "message": "❤️ Support"
+  },
+  "issuesAndSuggestions": {
+    "message": "🤔 Issues and Suggestions"
+  },
+  "github": {
+    "message": "🌐 GitHub"
+  },
+  "reportIssue": {
+    "message": "🐛 Report Issue"
+  },
+  "buyMeACoffee": {
+    "message": "☕ Buy me a coffee"
+  },
+  "leaveAReview": {
+    "message": "🌟 Leave a review"
+  }
+} 

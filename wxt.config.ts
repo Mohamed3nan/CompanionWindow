@@ -3,11 +3,13 @@ import removeConsole from 'vite-plugin-remove-console';
 
 // See https://wxt.dev/api/config.html
 export default defineConfig({
+  modules: ['@wxt-dev/i18n/module'],
   extensionApi: 'chrome',
   manifest: {
-    name: "Companion Window | Always on Top",
-    description: "Transform any webpage into a floating, always-on-top window for seamless multitasking and enhanced productivity",
-    version: "2.4",
+    name: "__MSG_extensionName__",
+    description: "__MSG_extensionDescription__",
+    version: "2.5",
+    default_locale: "en",
     permissions: [
       "activeTab",
       "declarativeNetRequestWithHostAccess",
@@ -21,7 +23,7 @@ export default defineConfig({
           default: "Alt+C",
           mac: "Alt+C"
         },
-        description: "Toggle Companion Window"
+        description: "__MSG_toggleCompanionWindow__"
       }
     },
     content_security_policy: {

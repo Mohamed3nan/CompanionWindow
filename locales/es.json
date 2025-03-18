@@ -1,0 +1,59 @@
+{
+  "extensionName": {
+    "message": "Ventana Compañera | Siempre Visible"
+  },
+  "extensionDescription": {
+    "message": "Transforma cualquier página web en una ventana flotante siempre visible para una multitarea perfecta y productividad mejorada"
+  },
+  "toggleCompanionWindow": {
+    "message": "Alternar Ventana Compañera"
+  },
+  "openInCompanionWindow": {
+    "message": "Abrir en Ventana Compañera"
+  },
+  "openLinkInCompanionWindow": {
+    "message": "Abrir enlace en Ventana Compañera"
+  },
+  "options": {
+    "message": "⚙️ Opciones"
+  },
+  "contextMenu": {
+    "message": "🖱️ Menú Contextual"
+  },
+  "inPage": {
+    "message": "En Página"
+  },
+  "on": {
+    "message": "Activado"
+  },
+  "off": {
+    "message": "Desactivado"
+  },
+  "onLink": {
+    "message": "En Enlace"
+  },
+  "floatingButton": {
+    "message": "••• Botón Flotante"
+  },
+  "keyboardShortcuts": {
+    "message": "⌨️ Atajos de Teclado"
+  },
+  "support": {
+    "message": "❤️ Apoyo"
+  },
+  "issuesAndSuggestions": {
+    "message": "🤔 Problemas y Sugerencias"
+  },
+  "github": {
+    "message": "🌐 GitHub"
+  },
+  "reportIssue": {
+    "message": "🐛 Reportar Problema"
+  },
+  "buyMeACoffee": {
+    "message": "☕ Invítame a un café"
+  },
+  "leaveAReview": {
+    "message": "🌟 Dejar una reseña"
+  }
+} 

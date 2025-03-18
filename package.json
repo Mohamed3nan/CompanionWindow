@@ -2,7 +2,7 @@
   "name": "companion-window",
   "description": "Transform any webpage into a floating, always-on-top window for seamless multitasking and enhanced productivity",
   "private": true,
-  "version": "2.4",
+  "version": "2.5",
   "keywords": ["browser-extension", "chrome-extension", "firefox-extension", "picture-in-picture", "multitasking", "productivity", "floating-window", "always-on-top", "web-extension", "companion-window"],
   "author": "Anan",
   "license": "CC BY-NC-ND 4.0",
@@ -21,7 +21,8 @@
     "@types/chrome": "^0.0.309",
     "typescript": "^5.8.2",
     "vite-plugin-remove-console": "^2.2.0",
-    "wxt": "^0.19.29"
+    "wxt": "^0.19.29",
+    "@wxt-dev/i18n": "^0.2.3"
   },
   "main": "index.js",
   "dependencies": {

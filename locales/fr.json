@@ -1,0 +1,59 @@
+{
+  "extensionName": {
+    "message": "Fenêtre Compagnon | Toujours Visible"
+  },
+  "extensionDescription": {
+    "message": "Transformez n'importe quelle page web en une fenêtre flottante toujours visible pour un multitâche fluide et une productivité accrue"
+  },
+  "toggleCompanionWindow": {
+    "message": "Basculer la Fenêtre Compagnon"
+  },
+  "openInCompanionWindow": {
+    "message": "Ouvrir dans la Fenêtre Compagnon"
+  },
+  "openLinkInCompanionWindow": {
+    "message": "Ouvrir le lien dans la Fenêtre Compagnon"
+  },
+  "options": {
+    "message": "⚙️ Options"
+  },
+  "contextMenu": {
+    "message": "🖱️ Menu Contextuel"
+  },
+  "inPage": {
+    "message": "Dans la Page"
+  },
+  "on": {
+    "message": "Activé"
+  },
+  "off": {
+    "message": "Désactivé"
+  },
+  "onLink": {
+    "message": "Sur le Lien"
+  },
+  "floatingButton": {
+    "message": "••• Bouton Flottant"
+  },
+  "keyboardShortcuts": {
+    "message": "⌨️ Raccourcis Clavier"
+  },
+  "support": {
+    "message": "❤️ Support"
+  },
+  "issuesAndSuggestions": {
+    "message": "🤔 Problèmes et Suggestions"
+  },
+  "github": {
+    "message": "🌐 GitHub"
+  },
+  "reportIssue": {
+    "message": "🐛 Signaler un Problème"
+  },
+  "buyMeACoffee": {
+    "message": "☕ M'offrir un café"
+  },
+  "leaveAReview": {
+    "message": "🌟 Laisser un avis"
+  }
+} 
