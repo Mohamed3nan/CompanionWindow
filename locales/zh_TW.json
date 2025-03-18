@@ -1,0 +1,59 @@
+{
+  "extensionName": {
+    "message": "伴侶視窗 | 始終置頂"
+  },
+  "extensionDescription": {
+    "message": "將任何網頁轉換為浮動的、始終置頂的視窗，實現無縫多任務處理和提高生產力"
+  },
+  "toggleCompanionWindow": {
+    "message": "切換伴侶視窗"
+  },
+  "openInCompanionWindow": {
+    "message": "在伴侶視窗中開啟"
+  },
+  "openLinkInCompanionWindow": {
+    "message": "在伴侶視窗中開啟連結"
+  },
+  "options": {
+    "message": "⚙️ 選項"
+  },
+  "contextMenu": {
+    "message": "🖱️ 右鍵選單"
+  },
+  "inPage": {
+    "message": "頁面中"
+  },
+  "on": {
+    "message": "開啟"
+  },
+  "off": {
+    "message": "關閉"
+  },
+  "onLink": {
+    "message": "連結上"
+  },
+  "floatingButton": {
+    "message": "••• 浮動按鈕"
+  },
+  "keyboardShortcuts": {
+    "message": "⌨️ 鍵盤快捷鍵"
+  },
+  "support": {
+    "message": "❤️ 支援"
+  },
+  "issuesAndSuggestions": {
+    "message": "🤔 問題和建議"
+  },
+  "github": {
+    "message": "🌐 GitHub"
+  },
+  "reportIssue": {
+    "message": "🐛 報告問題"
+  },
+  "buyMeACoffee": {
+    "message": "☕ 請我喝咖啡"
+  },
+  "leaveAReview": {
+    "message": "🌟 留下評論"
+  }
+} 

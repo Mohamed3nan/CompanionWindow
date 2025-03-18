@@ -1,0 +1,59 @@
+{
+  "extensionName": {
+    "message": "Janela Companheira | Sempre Visível"
+  },
+  "extensionDescription": {
+    "message": "Transforme qualquer página web numa janela flutuante sempre visível para multitarefas perfeitas e produtividade melhorada"
+  },
+  "toggleCompanionWindow": {
+    "message": "Alternar Janela Companheira"
+  },
+  "openInCompanionWindow": {
+    "message": "Abrir na Janela Companheira"
+  },
+  "openLinkInCompanionWindow": {
+    "message": "Abrir ligação na Janela Companheira"
+  },
+  "options": {
+    "message": "⚙️ Opções"
+  },
+  "contextMenu": {
+    "message": "🖱️ Menu de Contexto"
+  },
+  "inPage": {
+    "message": "Na Página"
+  },
+  "on": {
+    "message": "Ativado"
+  },
+  "off": {
+    "message": "Desativado"
+  },
+  "onLink": {
+    "message": "Na Ligação"
+  },
+  "floatingButton": {
+    "message": "••• Botão Flutuante"
+  },
+  "keyboardShortcuts": {
+    "message": "⌨️ Atalhos de Teclado"
+  },
+  "support": {
+    "message": "❤️ Suporte"
+  },
+  "issuesAndSuggestions": {
+    "message": "🤔 Problemas e Sugestões"
+  },
+  "github": {
+    "message": "🌐 GitHub"
+  },
+  "reportIssue": {
+    "message": "🐛 Reportar Problema"
+  },
+  "buyMeACoffee": {
+    "message": "☕ Ofereça-me um café"
+  },
+  "leaveAReview": {
+    "message": "🌟 Deixe uma avaliação"
+  }
+} 
