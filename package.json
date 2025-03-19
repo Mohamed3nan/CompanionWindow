@@ -26,6 +26,5 @@
   },
   "main": "index.js",
   "dependencies": {
-    "mellowtel": "^1.5.6"
   }
 }

@@ -44,7 +44,7 @@ export default defineConfig({
       }
     },
     web_accessible_resources: [{
-      resources: ["icon/*", "pip.html", "pip.css", "pascoli.html"],
+      resources: ["icon/*", "pip.html", "pip.css"],
       matches: ["<all_urls>"]
     }]
   },
